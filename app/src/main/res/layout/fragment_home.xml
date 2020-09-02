@@ -1,0 +1,57 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/text_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="sans-serif"
+        android:textAlignment="center"
+        android:textColor="#2196F3"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <VideoView
+        android:id="@+id/videoView2"
+        android:layout_width="match_parent"
+        android:layout_height="225dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+        android:orientation="horizontal">
+
+
+        <ImageButton
+            android:id="@+id/btn_book"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            android:src="@drawable/book_cover"
+            android:background="#000000"
+            tools:src="@drawable/book_cover" />
+
+        <ImageButton
+            android:id="@+id/btn_website"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            android:src="@drawable/money"
+            android:background="#ffffff"/>
+    </LinearLayout>
+</LinearLayout>
