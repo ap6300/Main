@@ -133,7 +133,7 @@ public class DreamDatabase {
     }
 
 
-    public class SQLHelper extends SQLiteOpenHelper {
+    public static class SQLHelper extends SQLiteOpenHelper {
         public SQLHelper (Context c) {
             super(c, DB_NAME, null, DB_VERSION);
         }
