@@ -70,6 +70,7 @@ public class WantsFragment extends Fragment {
         inflater.inflate(R.menu.menu, menu);
         super.onCreateOptionsMenu(menu,inflater);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
