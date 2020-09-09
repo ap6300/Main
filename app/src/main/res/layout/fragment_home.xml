@@ -20,10 +20,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <VideoView
+    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
         android:id="@+id/videoView2"
         android:layout_width="match_parent"
-        android:layout_height="225dp" />
+        android:layout_height="207dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,6 +43,7 @@
             android:scaleType="fitCenter"
             android:src="@drawable/book_cover"
             android:background="#000000"
+            android:onClick="onClick"
             tools:src="@drawable/book_cover" />
 
         <ImageButton

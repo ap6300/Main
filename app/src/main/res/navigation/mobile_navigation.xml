@@ -11,23 +11,8 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
 
-        <action
-            android:id="@+id/action_HomeFragment_to_HomeSecondFragment"
-            app:destination="@id/nav_home_second" />
     </fragment>
-    <fragment
-        android:id="@+id/nav_home_second"
-        android:name="com.example.projectlayout.ui.home.HomeSecondFragment"
-        android:label="@string/home_second"
-        tools:layout="@layout/fragment_home_second">
-        <action
-            android:id="@+id/action_HomeSecondFragment_to_HomeFragment"
-            app:destination="@id/nav_home" />
 
-        <argument
-            android:name="myArg"
-            app:argType="string" />
-    </fragment>
 
     <fragment
         android:id="@+id/nav_alarm"
@@ -38,13 +23,22 @@
         android:id="@+id/nav_dream"
         android:name="com.example.projectlayout.ui.dream.DreamFragment"
         android:label="@string/menu_dream"
-        tools:layout="@layout/fragment_dream" />
+        tools:layout="@layout/fragment_dream" >
+        <action
+            android:id="@+id/action_nav_dream_to_fragment_addDream"
+            app:destination="@id/fragment_addDream" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_wants"
         android:name="com.example.projectlayout.ui.Wants.WantsFragment"
         android:label="@string/menu_wants"
         tools:layout="@layout/fragment_wants" />
+    <fragment
+        android:id="@+id/fragment_addDream"
+        android:name="com.example.projectlayout.ui.dream.fragment_addDream"
+        android:label="fragment_add_dream"
+        tools:layout="@layout/fragment_add_dream" />
 
 
 </navigation>
