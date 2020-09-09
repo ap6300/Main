@@ -24,6 +24,8 @@ public class WantsFragment extends Fragment {
                 ViewModelProviders.of(this).get(WantsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_wants, container, false);
         final TextView textView = root.findViewById(R.id.text_gallery);
+
+
         galleryViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {

@@ -1,5 +1,6 @@
 package com.example.projectlayout.ui.dream;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 
 public class DreamFragment extends Fragment  {
 
-    private ImageAdapter mAdapter;
+
     private DreamDatabase db;
 
     private static final int IMAGE_PICK_CODE = 1000;
@@ -51,12 +52,24 @@ public class DreamFragment extends Fragment  {
         //ListView
         ListView gridview = (ListView) root.findViewById(R.id.gridview);
 
-        db = new DreamDatabase( getActivity());
+        db = new DreamDatabase(getActivity());
         db.openReadable();
 
+        list = new ArrayList<>();
+        ImageAdapter arrayAdpt = new ImageAdapter(getActivity(), getContext(), list);
+        gridview.setAdapter(arrayAdpt);
 
-        mAdapter = new ImageAdapter(getActivity(),getContext(),list);
-        gridview.setAdapter(mAdapter);
+        Cursor cursor = db.getData("SELECT * FROM Dreamboard");
+        list.clear();
+        while (cursor.moveToNext()) {
+            String price = cursor.getString(0);
+            byte[] image = cursor.getBlob(1);
+
+            list.add(new Dreamboard( price, image));
+        }
+
+        arrayAdpt.notifyDataSetChanged();
+
 
 
 

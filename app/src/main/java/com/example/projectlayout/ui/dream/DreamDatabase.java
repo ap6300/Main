@@ -34,6 +34,11 @@ public class DreamDatabase {
         return this;
     }
 
+    public Cursor getData(String sql) {
+        db = helper.getReadableDatabase();
+        return db.rawQuery(sql, null);
+    }
+
 
 
 
@@ -133,10 +138,13 @@ public class DreamDatabase {
     }
 
 
-    public class SQLHelper extends SQLiteOpenHelper {
+    public static class SQLHelper extends SQLiteOpenHelper {
         public SQLHelper (Context c) {
             super(c, DB_NAME, null, DB_VERSION);
         }
+
+
+
 
         @Override
         public void onCreate(SQLiteDatabase db) {
@@ -149,6 +157,8 @@ public class DreamDatabase {
             db.execSQL("DROP TABLE IF EXISTS " + DB_TABLE);
             onCreate(db);
         }
+
+
 
     }
 }

@@ -48,7 +48,7 @@ public class fragment_addDream extends Fragment {
 
     ImageView mImageView;
     private boolean recInserted;
-    private DreamDatabase mydManager;
+    private DreamDatabase db;
     private EditText description;
     ArrayList<Dreamboard> list;
 
@@ -97,6 +97,9 @@ public class fragment_addDream extends Fragment {
 
         description = (EditText) root.findViewById(R.id.description);
 
+        db = new DreamDatabase(getActivity());
+        db.openReadable();
+
         //imageview
         mImageView = root.findViewById(R.id.image);
         mImageView.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +122,7 @@ public class fragment_addDream extends Fragment {
             }
         });
 
+        //add Dreamboard
         Button add = (Button) root.findViewById(R.id.add);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,8 +130,7 @@ public class fragment_addDream extends Fragment {
 
                 if (description.getText() != null && (int) mImageView.getTag() == 1)
                     recInserted=true;
-                    //recInserted = mydManager.addRow(description.getText().toString(), imageViewToByte(mImageView));
-
+                    recInserted = db.addRow(description.getText().toString(), imageViewToByte(mImageView));
 
                 if (recInserted) {
                     Toast.makeText(getActivity(), "Success add row", Toast.LENGTH_SHORT).show();

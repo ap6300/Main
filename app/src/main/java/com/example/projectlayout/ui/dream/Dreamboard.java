@@ -8,12 +8,15 @@ public class Dreamboard {
 
 
 
+
     public Dreamboard(String name, byte[] image){
         this.name = name;
         this.image = image;
     }
 
     public Dreamboard() {}
+
+
 
     public void setName(String name) {
         this.name = name;
