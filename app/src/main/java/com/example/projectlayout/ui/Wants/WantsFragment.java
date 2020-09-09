@@ -3,6 +3,7 @@ package com.example.projectlayout.ui.Wants;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,36 +65,34 @@ public class WantsFragment extends Fragment {
         });
         return root;
     }
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu, menu);
+        super.onCreateOptionsMenu(menu,inflater);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (item.getItemId()) {
             case R.id.add:
-                Addlists();
+                //Addlists();
                 break;
             case R.id.show:
-                Showlists();
+                //Showlists();
                 break;
             case R.id.delete:
-                Removelists();
+                //Removelists();
                 break;
         }
         //return true;
         return super.onOptionsItemSelected(item);
     }
     public boolean Showlists() {
-        addLayout.setVisibility(View.GONE);
-        productRec.setVisibility(View.VISIBLE);
+
         mydatabase.openReadable();
         ArrayList<String> tableContent = mydatabase.retrieveRows();
         response.setText("The list: \n");
-        ArrayAdapter<String> arrayAdpt = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tableContent);
+        ArrayAdapter<String> arrayAdpt = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, tableContent);
         productRec.setAdapter(arrayAdpt);
         return true;
     }
@@ -106,7 +105,7 @@ public class WantsFragment extends Fragment {
     }
 
     public boolean Removelists() {
-        mydatabase.clearRecords();
+        mydatabase.clearRecords("hi");
         response.setText("List removed");
         productRec.setAdapter(null);
         return true;
