@@ -43,6 +43,8 @@ public class WantsFragment extends Fragment {
         galleryViewModel =
                 ViewModelProviders.of(this).get(WantsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_wants, container, false);
+        setHasOptionsMenu(true);
+
         mydatabase = new DatabaseManager(getActivity());
         response = (TextView)root.findViewById(R.id.response);
         productRec = (ListView)root.findViewById(R.id.prodrec);
@@ -65,8 +67,8 @@ public class WantsFragment extends Fragment {
         });
         return root;
     }
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
+
         inflater.inflate(R.menu.menu, menu);
         super.onCreateOptionsMenu(menu,inflater);
     }
