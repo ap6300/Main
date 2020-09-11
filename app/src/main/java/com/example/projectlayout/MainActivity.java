@@ -13,10 +13,12 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.projectlayout.ui.dream.DreamDatabase;
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
     private AppBarConfiguration mAppBarConfiguration;
     private DreamDatabase db;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         db = new DreamDatabase(MainActivity.this);
         db.openReadable();
+
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -60,4 +63,6 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+
 }
+

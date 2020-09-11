@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_nav_dream_to_fragment_addDream"
             app:destination="@id/fragment_addDream" />
+        <action
+            android:id="@+id/action_nav_dream_to_fragment_editDream"
+            app:destination="@id/fragment_editDream" />
     </fragment>
 
     <fragment
@@ -39,6 +42,11 @@
         android:name="com.example.projectlayout.ui.dream.fragment_addDream"
         android:label="fragment_add_dream"
         tools:layout="@layout/fragment_add_dream" />
+    <fragment
+        android:id="@+id/fragment_editDream"
+        android:name="com.example.projectlayout.ui.dream.fragment_editDream"
+        android:label="fragment_edit_dream"
+        tools:layout="@layout/fragment_edit_dream" />
 
 
 </navigation>

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -34,9 +35,36 @@ public class DreamDatabase {
         return this;
     }
 
-    public Cursor getData(String sql) {
+    Cursor getData(String sql) {
         db = helper.getReadableDatabase();
         return db.rawQuery(sql, null);
+    }
+
+    void updateData(String name, byte[] image, String hold) {
+        db = helper.getReadableDatabase();
+
+        String sql = "UPDATE Dreamboard SET description = ?, image = ? WHERE description = ?";
+        SQLiteStatement statement = db.compileStatement(sql);
+
+        statement.bindString(1, name);
+        statement.bindBlob(2, image);
+        statement.bindString(3, hold);
+
+        statement.execute();
+
+    }
+
+
+    public  void deleteData(String name) {
+        db = helper.getReadableDatabase();
+
+        String sql = "DELETE FROM Dreamboard WHERE description = ?";
+        SQLiteStatement statement = db.compileStatement(sql);
+        statement.clearBindings();
+        statement.bindString(1, name);
+
+        statement.execute();
+
     }
 
 
@@ -74,6 +102,21 @@ public class DreamDatabase {
         }
         return productRows;
     }
+
+    public ArrayList<String> selectRow(String name){
+
+        ArrayList<String> array_list = new ArrayList<String>();
+        Cursor cursor =db.rawQuery("select * from Dreamboard where description= '"+name+"'",null);
+        cursor.moveToFirst();
+        array_list.add(cursor.getString(0));
+        array_list.add(cursor.getString(1));
+        array_list.add(cursor.getString(2));
+        array_list.add(cursor.getString(3));
+        array_list.add(cursor.getString(4));
+        return array_list;
+    }
+
+
 
     /*
     public void queryData(String sql){

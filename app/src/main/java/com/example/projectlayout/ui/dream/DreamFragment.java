@@ -8,10 +8,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.AdapterView;
+import android.widget.GridView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,15 +27,7 @@ public class DreamFragment extends Fragment  {
 
     private DreamDatabase db;
 
-    private static final int IMAGE_PICK_CODE = 1000;
-    private static final int PERMISSION_CODE = 1001;
-
     private DreamViewModel mViewModel;
-
-
-    ImageView mImageView;
-    private boolean recInserted;
-    private EditText description;
     private ArrayList<Dreamboard> list;
 
     public static DreamFragment newInstance() {
@@ -48,9 +39,9 @@ public class DreamFragment extends Fragment  {
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_dream, container, false);
         setHasOptionsMenu(true);
-        //mydManager = new DreamDatabase(getActivity());
+
         //ListView
-        ListView gridview = (ListView) root.findViewById(R.id.gridview);
+        GridView gridview = (GridView) root.findViewById(R.id.gridview);
 
         db = new DreamDatabase(getActivity());
         db.openReadable();
@@ -72,6 +63,22 @@ public class DreamFragment extends Fragment  {
 
 
 
+
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+           @Override
+           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+               Bundle result = new Bundle();
+               TextView hi = view.findViewById(R.id.textView_listView);
+
+               result.putString("key", (String) hi.getText());
+               getParentFragmentManager().setFragmentResult("key", result);
+
+
+               NavHostFragment.findNavController(DreamFragment.this).navigate(R.id.action_nav_dream_to_fragment_editDream);
+
+           }
+        });
 
         return root;
     }
@@ -100,16 +107,15 @@ public class DreamFragment extends Fragment  {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.add_photo) {
-            Toast.makeText(getActivity(), "Change", Toast.LENGTH_LONG).show();
             NavHostFragment.findNavController(DreamFragment.this)
                     .navigate(R.id.action_nav_dream_to_fragment_addDream);
             return true;
         }
-//
-//
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
 
 }

@@ -16,8 +16,6 @@ public class Dreamboard {
 
     public Dreamboard() {}
 
-
-
     public void setName(String name) {
         this.name = name;
     }
