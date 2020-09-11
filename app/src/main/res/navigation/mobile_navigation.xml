@@ -41,12 +41,20 @@
         android:id="@+id/fragment_addDream"
         android:name="com.example.projectlayout.ui.dream.fragment_addDream"
         android:label="fragment_add_dream"
-        tools:layout="@layout/fragment_add_dream" />
+        tools:layout="@layout/fragment_add_dream" >
+        <action
+            android:id="@+id/action_fragment_addDream_to_nav_dream"
+            app:destination="@id/nav_dream" />
+    </fragment>
     <fragment
         android:id="@+id/fragment_editDream"
         android:name="com.example.projectlayout.ui.dream.fragment_editDream"
         android:label="fragment_edit_dream"
-        tools:layout="@layout/fragment_edit_dream" />
+        tools:layout="@layout/fragment_edit_dream" >
+        <action
+            android:id="@+id/action_fragment_editDream_to_nav_dream"
+            app:destination="@id/nav_dream" />
+    </fragment>
 
 
 </navigation>

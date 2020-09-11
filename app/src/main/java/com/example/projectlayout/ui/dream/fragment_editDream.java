@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.projectlayout.R;
 
@@ -142,6 +143,8 @@ public class fragment_editDream extends Fragment {
             public void onClick(View v) {
                 db.updateData(editText.getText().toString(),imageViewToByte(imageView), hold[0]);
                 Toast.makeText(getActivity(), "Success update row", Toast.LENGTH_SHORT).show();
+                NavHostFragment.findNavController(fragment_editDream.this)
+                        .navigate(R.id.action_fragment_editDream_to_nav_dream);
             }
         });
 
@@ -153,6 +156,8 @@ public class fragment_editDream extends Fragment {
             public void onClick(View v) {
                 db.deleteData(hold[0]);
                 Toast.makeText(getActivity(), "Success delete row", Toast.LENGTH_SHORT).show();
+                NavHostFragment.findNavController(fragment_editDream.this)
+                        .navigate(R.id.action_fragment_editDream_to_nav_dream);
             }
         });
 

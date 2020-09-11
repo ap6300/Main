@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.projectlayout.R;
 
@@ -134,6 +135,8 @@ public class fragment_addDream extends Fragment {
 
                 if (recInserted) {
                     Toast.makeText(getActivity(), "Success add row", Toast.LENGTH_SHORT).show();
+                    NavHostFragment.findNavController(fragment_addDream.this)
+                            .navigate(R.id.action_fragment_addDream_to_nav_dream);
                 } else {
                     Toast.makeText(getActivity(), "Not Success add row", Toast.LENGTH_SHORT).show();
                 }
