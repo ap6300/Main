@@ -6,125 +6,57 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+import androidx.annotation.NonNull;
 
 import com.example.projectlayout.R;
 
-
-/**
- * Created by hanh.vo on 12/04/2018.
- */
-
-public class CustomAdapter extends ArrayAdapter<String> {
-    private final Context context;
-    private final String[] values;
-    private boolean checked = false;
-
-    // boolean array for storing
-    //the state of each CheckBox
-    boolean[] checkBoxState;
-
-
-    ViewHolder viewHolder;
-
-
-    public CustomAdapter(Context context, String[] values) {
-        super(context, R.layout.rowlayout, values);
-        this.context = context;
-        this.values = values;
-        checkBoxState = new boolean[values.length];
-    }
-
-    private class ViewHolder
-    {
-        ImageView photo;
-        TextView name;
+import java.util.ArrayList;
+public class CustomAdapter extends ArrayAdapter{
+    private ArrayList<want> dataSet;
+    Context mContext;
+    // View lookup cache
+    private static class ViewHolder {
+        TextView txtName;
         CheckBox checkBox;
-
-        public CheckBox getCheckBox() {
-            return checkBox;
-        }
-
-        public TextView getName() {
-            return name;
-        }
     }
-
+    public CustomAdapter(ArrayList<want> data, Context context) {
+        super(context, R.layout.fragment_wants, data);
+        this.dataSet = data;
+        this.mContext = context;
+    }
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-
-        if(convertView==null)
-        {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView=inflater.inflate(R.layout.rowlayout, null);
-            viewHolder=new ViewHolder();
-
-            //cache the views
-            viewHolder.photo=(ImageView) convertView.findViewById(R.id.icon);
-            viewHolder.name=(TextView) convertView.findViewById(R.id.label);
-            viewHolder.checkBox=(CheckBox) convertView.findViewById(R.id.checkBox);
-
-            //link the cached views to the convertview
-            convertView.setTag( viewHolder);
-
-
-        }
-        else
-            viewHolder=(ViewHolder) convertView.getTag();
-
-        viewHolder.name.setText(values[position]);
-
-
-
-        String s = values[position];
-
-        //set icon image
-
-        if (s.startsWith("Windows7") || s.startsWith("iPhone") || s.startsWith("Solaris")) {
-            viewHolder.photo.setImageResource(R.drawable.logo);
+    public int getCount() {
+        return dataSet.size();
+    }
+    @Override
+    public Object getItem(int position) {
+        return dataSet.get(position);
+    }
+    @Override
+    public View getView(int position, View convertView, @NonNull ViewGroup parent){
+        ViewHolder viewHolder;
+        final View result;
+        if (convertView == null) {
+            viewHolder = new ViewHolder();
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.rowlayout, parent, false);
+            viewHolder.txtName = (TextView) convertView.findViewById(R.id.label);
+            viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
+            result=convertView;
+            convertView.setTag(viewHolder);
         } else {
-            viewHolder.photo.setImageResource(R.drawable.money);
+            viewHolder = (ViewHolder) convertView.getTag();
+            result=convertView;
         }
+        want item = dataSet.get(position);
+        viewHolder.txtName.setText(item.name);
 
+        if(item.checked == 1){
+            viewHolder.checkBox.setChecked(true);
+        } else {
 
-        //VITAL PART!!! Set the state of the
-        //CheckBox using the boolean array
-        viewHolder.checkBox.setChecked(checkBoxState[position]);
-
-
-        //for managing the state of the boolean
-        //array according to the state of the
-        //CheckBox
-
-        viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-                if(((CheckBox)v).isChecked()) {
-                    checkBoxState[position] = true;
-                }
-                else
-                    checkBoxState[position]=false;
-
-            }
-        });
-
-        //return the view to be displayed
-        return convertView;
+            viewHolder.checkBox.setChecked(false);
+        }
+        return result;
     }
-
-    public boolean[] getCheckBoxState(){
-        return checkBoxState;
-    }
-
-    public String getName(int pos){
-        String val = values[pos];
-        return val;
-    }
-
-
 }
-
-

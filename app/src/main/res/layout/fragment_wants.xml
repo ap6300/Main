@@ -1,19 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="60dp">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/response" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="add new item"
-        android:textColor="#FFFEFE" />
+    android:layout_height="match_parent">
 
     <ListView
         android:id="@+id/prodrec"
@@ -21,19 +9,5 @@
         android:layout_height="match_parent"
         android:drawSelectorOnTop="false" />
 
-    <TableLayout
-        android:id="@+id/add_table"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="40dp">
 
-        <TableRow>
-            <Button
-                android:id="@+id/add_button"
-                android:text="Add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="3dip" />
-        </TableRow>
-    </TableLayout>
 </LinearLayout>

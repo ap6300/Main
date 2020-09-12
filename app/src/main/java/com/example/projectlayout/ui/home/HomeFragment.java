@@ -39,7 +39,7 @@ public class HomeFragment extends Fragment{
         youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                String videoId = "S0Q4gqBUs7c";
+                String videoId = "nnVjsos40qk";
                 youTubePlayer.loadVideo(videoId, 0);
             }
         });

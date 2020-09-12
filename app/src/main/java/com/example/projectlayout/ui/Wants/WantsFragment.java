@@ -1,6 +1,10 @@
 package com.example.projectlayout.ui.Wants;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.service.autofill.CustomDescription;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +25,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.projectlayout.R;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -28,13 +33,14 @@ public class WantsFragment extends Fragment {
 
     private WantsViewModel galleryViewModel;
 
-    private DatabaseManager mydatabase;
+    private WantsDatabasee mydatabase;
     private TextView response;
     private ListView productRec;
     private EditText phone, name, address, gender;
     private Button addButton;
     private TableLayout addLayout;
     private boolean Inserted;
+    private CustomAdapter adt;
 
 
 
@@ -45,26 +51,30 @@ public class WantsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_wants, container, false);
         setHasOptionsMenu(true);
 
-        mydatabase = new DatabaseManager(getActivity());
-        response = (TextView)root.findViewById(R.id.response);
+
+
         productRec = (ListView)root.findViewById(R.id.prodrec);
-        addLayout = (TableLayout)root.findViewById(R.id.add_table);
 
-        //want add fragment
-        addButton = (Button)root.findViewById(R.id.add_button);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        mydatabase = new WantsDatabasee(getActivity());
 
-                Inserted = mydatabase.addRow("hi");
-                addLayout.setVisibility(View.GONE);
-                if (Inserted) {
-                    response.setText("The row in the table is inserted");
-                }
-                else {
-                    response.setText("Sorry, errors when inserting to DB");
-                }
-            }
-        });
+        mydatabase.openReadable();
+
+        ArrayList<want> item = new ArrayList<>();
+
+        adt = new CustomAdapter(item,getContext());
+        productRec.setAdapter(adt);
+
+        Cursor cursor = mydatabase.getData("SELECT * FROM Task");
+        item.clear();
+        while (cursor.moveToNext()) {
+            String task = cursor.getString(0);
+            int checked = cursor.getInt(1);
+
+            item.add(new want( task, checked));
+        }
+        adt.notifyDataSetChanged();
+
+
         return root;
     }
     public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
@@ -78,13 +88,13 @@ public class WantsFragment extends Fragment {
         int id = item.getItemId();
         switch (item.getItemId()) {
             case R.id.add:
-                //Addlists();
+                showAlertDialogButtonClicked(getView());
                 break;
             case R.id.show:
                 //Showlists();
                 break;
             case R.id.delete:
-                //Removelists();
+                Removelists();
                 break;
         }
         //return true;
@@ -100,22 +110,51 @@ public class WantsFragment extends Fragment {
         return true;
     }
 
-    public boolean Addlists() {
-        addLayout.setVisibility(View.VISIBLE);
-        response.setText("Enter information of a new task");
-        productRec.setVisibility(View.GONE);
-        return true;
-    }
 
     public boolean Removelists() {
-        mydatabase.clearRecords("hi");
-        response.setText("List removed");
-        productRec.setAdapter(null);
+        mydatabase.clearRecords("Name");
+
+        adt.notifyDataSetChanged();
         return true;
     }
 
 
+    public void showAlertDialogButtonClicked(View view) {
+        // create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Desire");
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.custom_add_item_list, null);
+        builder.setView(customLayout);
+        // add a button
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // send data from the AlertDialog to the Activity
+                EditText editText = customLayout.findViewById(R.id.editTextTextPersonName);
 
-
-
+                mydatabase.openReadable();
+                Boolean work = mydatabase.addRow(editText.getText().toString(),0);
+                if(work){
+                    sendDialogDataToActivity(editText.getText().toString());
+                    adt.notifyDataSetChanged();
+                }else{
+                    Toast.makeText(getActivity(), "notworking", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    // do something with the data coming from the AlertDialog
+    private void sendDialogDataToActivity(String data) {
+        Toast.makeText(getActivity(), data, Toast.LENGTH_SHORT).show();
+    }
 }
+
+
+
+
+
+
