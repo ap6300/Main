@@ -18,7 +18,11 @@
         android:id="@+id/nav_alarm"
         android:name="com.example.projectlayout.ui.Alarm.AlarmFragment"
         android:label="@string/menu_alarm"
-        tools:layout="@layout/fragment_alarm" />
+        tools:layout="@layout/fragment_alarm" >
+        <action
+            android:id="@+id/action_nav_alarm_to_fragment_addAlarm"
+            app:destination="@id/fragment_addAlarm" />
+    </fragment>
     <fragment
         android:id="@+id/nav_dream"
         android:name="com.example.projectlayout.ui.dream.DreamFragment"
@@ -55,6 +59,11 @@
             android:id="@+id/action_fragment_editDream_to_nav_dream"
             app:destination="@id/nav_dream" />
     </fragment>
+    <fragment
+        android:id="@+id/fragment_addAlarm"
+        android:name="com.example.projectlayout.ui.Alarm.fragment_addAlarm"
+        android:label="fragment_add_alarm"
+        tools:layout="@layout/fragment_add_alarm" />
 
 
 </navigation>
