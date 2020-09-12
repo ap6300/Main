@@ -1,5 +1,4 @@
-package com.example.projectlayout.ui.dream;
-
+package com.example.projectlayout.ui.Alarm;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,26 +8,28 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+public class AlarmDatabase {
 
-public class DreamDatabase {
 
-    private static final String DB_NAME = "Dreamboard";
-    private static final String DB_TABLE = "Dreamboard";
+    private static final String DB_NAME = "Alarm";
+    private static final String DB_TABLE = "Alarm";
     private static final int DB_VERSION = 1;
-    private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE + " (description VARCHAR, image BLOB);";
+    private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE + " " +
+            "(id INTEGER PRIMARY KEY AUTOINCREMENT, hour INTEGER, min INTEGER, description VARCHAR, alarmOn INTEGER, recurring INTEGER," +
+            "mon INTEGER, tue INTEGER, wed INTEGER, thur INTEGER, fri INTEGER, sat INTEGER, sun INTEGER, image BLOB);";
 
-    private SQLHelper helper;
+    private AlarmDatabase.SQLHelper helper;
     private SQLiteDatabase db;
     private Context context;
 
-    public DreamDatabase(Context c) {
+    public AlarmDatabase(Context c) {
         this.context = c;
-        helper = new SQLHelper(c);
+        helper = new AlarmDatabase.SQLHelper(c);
         this.db = helper.getWritableDatabase();
     }
 
-    public DreamDatabase openReadable() throws android.database.SQLException {
-        helper = new SQLHelper(context);
+    public AlarmDatabase openReadable() throws android.database.SQLException {
+        helper = new AlarmDatabase.SQLHelper(context);
         db = helper.getReadableDatabase();
         return this;
     }
@@ -37,6 +38,33 @@ public class DreamDatabase {
         db = helper.getReadableDatabase();
         return db.rawQuery(sql, null);
     }
+
+    public boolean addRow(int hour,int min, String description,int alarmOn, int recurring, int mon, int tue, int wed, int thur, int fri, int sat, int sun, byte[] image) {
+        synchronized(this.db) {
+
+            ContentValues newAlarm = new ContentValues();
+            newAlarm.put("hour",hour);
+            newAlarm.put("min",min);
+            newAlarm.put("description", description);
+            newAlarm.put("alarmOn",alarmOn);
+            newAlarm.put("recurring",recurring);
+            newAlarm.put("mon",mon);
+            newAlarm.put("tue",tue);
+            newAlarm.put("wed",wed);
+            newAlarm.put("thur",thur);
+            newAlarm.put("image", image);
+            try {
+                db.insertOrThrow(DB_TABLE, null, newAlarm);
+            } catch (Exception e) {
+                Log.e("Error in inserting rows", e.toString());
+                e.printStackTrace();
+                return false;
+            }
+            //db.close();
+            return true;
+        }
+    }
+
 
     void updateData(String name, byte[] image, String hold) {
         db = helper.getReadableDatabase();
@@ -69,34 +97,6 @@ public class DreamDatabase {
 
 
 
-    public boolean addRow(String d, byte[] image) {
-        synchronized(this.db) {
-
-            ContentValues newDream = new ContentValues();
-            newDream.put("description", d);
-            newDream.put("image", image);
-            try {
-                db.insertOrThrow(DB_TABLE, null, newDream);
-            } catch (Exception e) {
-                Log.e("Error in inserting rows", e.toString());
-                e.printStackTrace();
-                return false;
-            }
-            //db.close();
-            return true;
-        }
-    }
-
-
-    public void clearRecords()
-    {
-        db = helper.getWritableDatabase();
-        db.delete(DB_TABLE, null, null);
-    }
-
-    public void close() {
-        helper.close();
-    }
 
 
     public static class SQLHelper extends SQLiteOpenHelper {
@@ -122,8 +122,6 @@ public class DreamDatabase {
 
 
     }
+
+
 }
-
-
-
-

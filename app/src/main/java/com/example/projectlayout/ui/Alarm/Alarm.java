@@ -6,6 +6,7 @@ public class Alarm {
     int hour;
     int min;
     String description;
+    boolean alarmOn;
     boolean recurring;
     boolean mon;
     boolean tue;
@@ -16,12 +17,13 @@ public class Alarm {
     boolean sun;
     byte [] image;
 
-    public Alarm(int id,int hour,int min, String description, boolean recurring, boolean mon, boolean tue, boolean wed, boolean thur, boolean fri, boolean sat, boolean sun, byte [] image)
+    public Alarm(int id,int hour,int min, String description,boolean alarmOn, boolean recurring, boolean mon, boolean tue, boolean wed, boolean thur, boolean fri, boolean sat, boolean sun, byte [] image)
     {
         this.id=id;
         this.hour = hour;
         this.min = min;
         this.description = description;
+        this.alarmOn = alarmOn;
         this.recurring = recurring;
         this.mon = mon;
         this.tue = tue;
@@ -136,5 +138,13 @@ public class Alarm {
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    public boolean isAlarmOn() {
+        return alarmOn;
+    }
+
+    public void setAlarmOn(boolean alarmOn) {
+        this.alarmOn = alarmOn;
     }
 }
