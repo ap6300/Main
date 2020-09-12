@@ -23,12 +23,6 @@ import java.util.ArrayList;
 
 public class DreamFragment extends Fragment  {
 
-
-    private DreamDatabase db;
-
-    private DreamViewModel mViewModel;
-    private ArrayList<Dreamboard> list;
-
     public static DreamFragment newInstance() {
         return new DreamFragment();
     }
@@ -42,10 +36,10 @@ public class DreamFragment extends Fragment  {
         //ListView
         GridView gridview = (GridView) root.findViewById(R.id.gridview);
 
-        db = new DreamDatabase(getActivity());
+        DreamDatabase db = new DreamDatabase(getActivity());
         db.openReadable();
 
-        list = new ArrayList<>();
+        ArrayList<Dreamboard> list = new ArrayList<>();
         ImageAdapter arrayAdpt = new ImageAdapter(getActivity(), getContext(), list);
         gridview.setAdapter(arrayAdpt);
 
@@ -84,7 +78,7 @@ public class DreamFragment extends Fragment  {
 
 
 
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main, menu);
         super.onCreateOptionsMenu(menu, inflater);
 
