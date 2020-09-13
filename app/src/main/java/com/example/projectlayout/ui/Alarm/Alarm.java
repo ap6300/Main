@@ -2,20 +2,20 @@ package com.example.projectlayout.ui.Alarm;
 
 public class Alarm {
 
-    int id;
-    int hour;
-    int min;
-    String description;
+    private int id;
+    private int hour;
+    private int min;
+    private String description;
     boolean alarmOn;
-    boolean recurring;
-    boolean mon;
-    boolean tue;
-    boolean wed;
-    boolean thur;
-    boolean fri;
-    boolean sat;
-    boolean sun;
-    byte [] image;
+    private boolean recurring;
+    private boolean mon;
+    private boolean tue;
+    private boolean wed;
+    private boolean thur;
+    private boolean fri;
+    private boolean sat;
+    private boolean sun;
+    private byte [] image;
 
     public Alarm(int id,int hour,int min, String description,boolean alarmOn, boolean recurring, boolean mon, boolean tue, boolean wed, boolean thur, boolean fri, boolean sat, boolean sun, byte [] image)
     {
@@ -44,7 +44,7 @@ public class Alarm {
         this.id = id;
     }
 
-    public int getHour() {
+    int getHour() {
         return hour;
     }
 
@@ -52,7 +52,7 @@ public class Alarm {
         this.hour = hour;
     }
 
-    public int getMin() {
+    int getMin() {
         return min;
     }
 
@@ -68,7 +68,7 @@ public class Alarm {
         this.description = description;
     }
 
-    public boolean isRecurring() {
+    boolean isRecurring() {
         return recurring;
     }
 

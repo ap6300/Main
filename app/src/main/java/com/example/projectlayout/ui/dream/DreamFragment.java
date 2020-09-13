@@ -40,7 +40,7 @@ public class DreamFragment extends Fragment  {
         db.openReadable();
 
         ArrayList<Dreamboard> list = new ArrayList<>();
-        ImageAdapter arrayAdpt = new ImageAdapter(getActivity(), getContext(), list);
+        ImageAdapter arrayAdpt = new ImageAdapter(getContext(), list);
         gridview.setAdapter(arrayAdpt);
 
         Cursor cursor = db.getData("SELECT * FROM Dreamboard");

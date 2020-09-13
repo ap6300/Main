@@ -10,8 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.fragment.app.FragmentActivity;
-
 import com.example.projectlayout.R;
 
 import java.util.ArrayList;
@@ -21,7 +19,7 @@ public class ImageAdapter extends BaseAdapter {
     private ArrayList<Dreamboard> list;
 
     // Constructor
-    ImageAdapter(FragmentActivity activity, Context c, ArrayList<Dreamboard> l) {
+    public ImageAdapter( Context c, ArrayList<Dreamboard> l) {
         this.mContext = c;
         this.list = l;
 

@@ -52,6 +52,9 @@ public class AlarmDatabase {
             newAlarm.put("tue",tue);
             newAlarm.put("wed",wed);
             newAlarm.put("thur",thur);
+            newAlarm.put("fri",fri);
+            newAlarm.put("sat",sat);
+            newAlarm.put("sun",sun);
             newAlarm.put("image", image);
             try {
                 db.insertOrThrow(DB_TABLE, null, newAlarm);
@@ -78,6 +81,11 @@ public class AlarmDatabase {
 
         statement.execute();
 
+    }
+    public void clearRecords()
+    {
+        db = helper.getWritableDatabase();
+        db.delete(DB_TABLE, null, null);
     }
 
 

@@ -1,5 +1,7 @@
 package com.example.projectlayout.ui.Alarm;
 
+import android.annotation.SuppressLint;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -7,7 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,16 +17,89 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.projectlayout.R;
 
+import java.util.ArrayList;
+
 public class AlarmFragment extends Fragment {
 
 
 
+    @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_alarm, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-
         setHasOptionsMenu(true);
+
+
+        ListView recyclerView = (ListView) root.findViewById(R.id.alarm_list);
+
+
+        ArrayList<Alarm> list = new ArrayList<>();
+
+
+        AlarmDatabase db = new AlarmDatabase(getActivity());
+        db.openReadable();
+
+        Cursor cursor = db.getData("SELECT * FROM Alarm");
+        list.clear();
+        while (cursor.moveToNext()) {
+
+
+            int id = cursor.getInt(0);
+            int hour= cursor.getInt(1);
+            int min = cursor.getInt(2);;
+            String description = cursor.getString(3);;
+
+            boolean alarmOn = false;
+            if(cursor.getInt(4) == 1){
+                alarmOn = true;
+            }
+
+            boolean recurring = false;
+            if(cursor.getInt(5) == 1){
+                recurring = true;
+            }
+
+            boolean mon = false;
+            if(cursor.getInt(6) == 1){
+                mon = true;
+            }
+            boolean tue = false;
+            if(cursor.getInt(7) == 1){
+                tue = true;
+            }
+            boolean wed = false;
+            if(cursor.getInt(8) == 1){
+                wed = true;
+            }
+            boolean thur = false;
+            if(cursor.getInt(9) == 1){
+                thur = true;
+            }
+            boolean fri = false;
+            if(cursor.getInt(10) == 1){
+                fri = true;
+            }
+            boolean sat = false;
+            if(cursor.getInt(11) == 1){
+                sat = true;
+            }
+            boolean sun = false;
+            if(cursor.getInt(12) == 1){
+                sun = true;
+            }
+
+
+            byte[] image = cursor.getBlob(13);
+
+            list.add(new Alarm(id,hour,min,description,alarmOn,recurring,mon,tue,wed,thur,fri,sat,sun,image));
+
+
+        }
+
+        AlarmAdapter alarmAdapter = new AlarmAdapter(getContext(),list);
+        recyclerView.setAdapter(alarmAdapter);
+        alarmAdapter.notifyDataSetChanged();
+
 
 
 
