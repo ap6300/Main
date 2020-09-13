@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
-
 import java.util.ArrayList;
 
 public class WantsDatabasee {
@@ -54,7 +53,6 @@ public class WantsDatabasee {
                 e.printStackTrace();
                 return false;
             }
-            //db.close();
             return true;
         }
     }

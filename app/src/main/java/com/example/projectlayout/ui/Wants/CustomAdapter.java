@@ -8,14 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-
 import com.example.projectlayout.R;
-
 import java.util.ArrayList;
+
+
 public class CustomAdapter extends ArrayAdapter{
     private ArrayList<want> dataSet;
     Context mContext;
-    // View lookup cache
     private static class ViewHolder {
         TextView txtName;
         CheckBox checkBox;

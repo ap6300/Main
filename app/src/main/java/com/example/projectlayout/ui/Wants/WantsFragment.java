@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.service.autofill.CustomDescription;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,14 +16,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-
 import com.example.projectlayout.R;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -97,7 +92,6 @@ public class WantsFragment extends Fragment {
                 Removelists();
                 break;
         }
-        //return true;
         return super.onOptionsItemSelected(item);
     }
     public boolean Showlists() {
@@ -112,25 +106,20 @@ public class WantsFragment extends Fragment {
 
 
     public boolean Removelists() {
-        mydatabase.clearRecords("Name");
-
+        mydatabase.clearRecords("Name");  // Need to be changed//
         adt.notifyDataSetChanged();
         return true;
     }
 
 
     public void showAlertDialogButtonClicked(View view) {
-        // create an alert builder
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Desire");
-        // set the custom layout
         final View customLayout = getLayoutInflater().inflate(R.layout.custom_add_item_list, null);
         builder.setView(customLayout);
-        // add a button
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // send data from the AlertDialog to the Activity
                 EditText editText = customLayout.findViewById(R.id.editTextTextPersonName);
 
                 mydatabase.openReadable();
@@ -139,15 +128,13 @@ public class WantsFragment extends Fragment {
                     sendDialogDataToActivity(editText.getText().toString());
                     adt.notifyDataSetChanged();
                 }else{
-                    Toast.makeText(getActivity(), "notworking", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Failure", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        // create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-    // do something with the data coming from the AlertDialog
     private void sendDialogDataToActivity(String data) {
         Toast.makeText(getActivity(), data, Toast.LENGTH_SHORT).show();
     }
