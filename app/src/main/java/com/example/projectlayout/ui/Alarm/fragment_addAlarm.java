@@ -1,6 +1,8 @@
 package com.example.projectlayout.ui.Alarm;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,7 +17,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -28,21 +29,19 @@ import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.DESCRIPTION;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.FRIDAY;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.IMAGE;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.MONDAY;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.RECURRING;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.SATURDAY;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.SUNDAY;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.THURSDAY;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.TUESDAY;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.WEDNESDAY;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link fragment_addAlarm#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class fragment_addAlarm extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
@@ -53,32 +52,10 @@ public class fragment_addAlarm extends Fragment {
     public fragment_addAlarm() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment fragment_addAlarm.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static fragment_addAlarm newInstance(String param1, String param2) {
-        fragment_addAlarm fragment = new fragment_addAlarm();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
+     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
@@ -90,9 +67,6 @@ public class fragment_addAlarm extends Fragment {
         final Calendar calendar = Calendar.getInstance();
 
         final TimePicker picker=(TimePicker)root.findViewById(R.id.timePicker1);
-
-        final TextView time = (TextView) root.findViewById(R.id.time);
-        final TextView hour = (TextView) root.findViewById(R.id.hour);
 
         final EditText description = (EditText) root.findViewById(R.id.description_add_alarm);
         final CheckBox repeat = (CheckBox) root.findViewById(R.id.repeat);
@@ -144,8 +118,7 @@ public class fragment_addAlarm extends Fragment {
             @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
-                time.setText(Integer.toString(picker.getMinute()));
-                hour.setText(Integer.toString(picker.getHour()));
+
 
                 int alarmOn = 1;
                 int hour = picker.getHour();
@@ -191,31 +164,49 @@ public class fragment_addAlarm extends Fragment {
                 }
 
 
-
                 if (description.getText() != null && (int) mImageView.getTag() == 1) {
-                    recInserted = db.addRow(hour,min,description.getText().toString(),alarmOn,recurring,monday,tuesday,wednesday,thursday,friday,saturday,sunday,imageViewToByte(mImageView));
+                    recInserted=db.addRow(hour,min,description.getText().toString(),alarmOn,recurring,monday,tuesday,wednesday,thursday,friday,saturday,sunday,imageViewToByte(mImageView));
+
+                    AlarmManager am;
+                    am = (AlarmManager) getContext().getSystemService(getContext().ALARM_SERVICE);
+                    Intent intent = new Intent(getContext(), AlarmBroadcastReceiver.class);
+                    intent.putExtra(RECURRING, recurring);
+                    intent.putExtra(MONDAY, mon.isChecked());
+                    intent.putExtra(TUESDAY, tue.isChecked());
+                    intent.putExtra(WEDNESDAY, wed.isChecked());
+                    intent.putExtra(THURSDAY, thur.isChecked());
+                    intent.putExtra(FRIDAY, fri.isChecked());
+                    intent.putExtra(SATURDAY, sat.isChecked());
+                    intent.putExtra(SUNDAY, sun.isChecked());
+                    intent.putExtra(DESCRIPTION, description.getText().toString());
+                    intent.putExtra(IMAGE,imageViewToByte(mImageView));
+
+                    PendingIntent sender = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
+
+                    calendar.setTimeInMillis(System.currentTimeMillis());
+                    calendar.set(Calendar.HOUR_OF_DAY, hour);
+                    calendar.set(Calendar.MINUTE, min);
+
+                    // if alarm time has already passed, increment day by 1
+                    if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+                        calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
+                    }
+
+                    am.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),sender);
+
+
                 }
                 if (recInserted) {
                     Toast.makeText(getActivity(), "Success add row", Toast.LENGTH_SHORT).show();
+
 
                 } else {
                     Toast.makeText(getActivity(), "Not Success add row", Toast.LENGTH_SHORT).show();
                 }
 
+                db.close();
             }
         });
-
-
-
-
-
-
-
-
-
-
-
-
         return root;
     }
 
@@ -262,6 +253,9 @@ public class fragment_addAlarm extends Fragment {
 
         }
     }
+
+
+
 
 
 }

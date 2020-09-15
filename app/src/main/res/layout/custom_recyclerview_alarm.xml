@@ -8,6 +8,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:descendantFocusability="blocksDescendants"
         app:cardCornerRadius="6dp"
         app:cardElevation="6dp"
         android:layout_margin="8dp">
@@ -19,6 +20,7 @@
 
             <ImageView
                 android:id="@+id/imageView2"
+                android:layout_marginTop="5dp"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center"

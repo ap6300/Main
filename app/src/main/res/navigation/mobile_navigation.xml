@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_nav_alarm_to_fragment_addAlarm"
             app:destination="@id/fragment_addAlarm" />
+        <action
+            android:id="@+id/action_nav_alarm_to_fragment_editAlarm"
+            app:destination="@id/fragment_editAlarm" />
     </fragment>
     <fragment
         android:id="@+id/nav_dream"
@@ -63,7 +66,20 @@
         android:id="@+id/fragment_addAlarm"
         android:name="com.example.projectlayout.ui.Alarm.fragment_addAlarm"
         android:label="fragment_add_alarm"
-        tools:layout="@layout/fragment_add_alarm" />
+        tools:layout="@layout/fragment_add_alarm" >
+        <action
+            android:id="@+id/action_fragment_addAlarm_to_nav_alarm"
+            app:destination="@id/nav_alarm" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_editAlarm"
+        android:name="com.example.projectlayout.ui.Alarm.fragment_editAlarm"
+        android:label="fragment_edit_alarm"
+        tools:layout="@layout/fragment_edit_alarm" >
+        <action
+            android:id="@+id/action_fragment_editAlarm_to_nav_alarm"
+            app:destination="@id/nav_alarm" />
+    </fragment>
 
 
 </navigation>

@@ -9,7 +9,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.widget.AdapterView;
+import android.widget.GridView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -29,20 +31,20 @@ public class AlarmFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_alarm, container, false);
         setHasOptionsMenu(true);
 
-
-        ListView recyclerView = (ListView) root.findViewById(R.id.alarm_list);
-
+        GridView recyclerView = (GridView) root.findViewById(R.id.alarm_list);
 
         ArrayList<Alarm> list = new ArrayList<>();
-
+        list.clear();
+        AlarmAdapter alarmAdapter = new AlarmAdapter(getContext(),list);
+        recyclerView.setAdapter(alarmAdapter);
 
         AlarmDatabase db = new AlarmDatabase(getActivity());
         db.openReadable();
 
-        Cursor cursor = db.getData("SELECT * FROM Alarm");
-        list.clear();
-        while (cursor.moveToNext()) {
 
+        Cursor cursor = db.getData("SELECT * FROM Alarm");
+
+        while (cursor.moveToNext()) {
 
             int id = cursor.getInt(0);
             int hour= cursor.getInt(1);
@@ -88,19 +90,30 @@ public class AlarmFragment extends Fragment {
                 sun = true;
             }
 
-
             byte[] image = cursor.getBlob(13);
 
             list.add(new Alarm(id,hour,min,description,alarmOn,recurring,mon,tue,wed,thur,fri,sat,sun,image));
 
 
         }
-
-        AlarmAdapter alarmAdapter = new AlarmAdapter(getContext(),list);
-        recyclerView.setAdapter(alarmAdapter);
         alarmAdapter.notifyDataSetChanged();
+        db.close();
+
+        recyclerView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Bundle result = new Bundle();
+                TextView hi = view.findViewById(R.id.item_alarm_title);
+
+                result.putString("key", (String) hi.getText());
+                getParentFragmentManager().setFragmentResult("key", result);
 
 
+                NavHostFragment.findNavController(AlarmFragment.this).navigate(R.id.action_nav_alarm_to_fragment_editAlarm);
+
+            }
+        });
 
 
 

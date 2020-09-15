@@ -1,5 +1,24 @@
 package com.example.projectlayout.ui.Alarm;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.widget.Toast;
+
+import java.util.Calendar;
+
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.DESCRIPTION;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.FRIDAY;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.IMAGE;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.MONDAY;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.RECURRING;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.SATURDAY;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.SUNDAY;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.THURSDAY;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.TUESDAY;
+import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.WEDNESDAY;
+
 public class Alarm {
 
     private int id;
@@ -147,4 +166,110 @@ public class Alarm {
     public void setAlarmOn(boolean alarmOn) {
         this.alarmOn = alarmOn;
     }
+
+    public void schedule(Context context) {
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+        intent.putExtra(RECURRING, recurring);
+        intent.putExtra(MONDAY, mon);
+        intent.putExtra(TUESDAY, tue);
+        intent.putExtra(WEDNESDAY, wed);
+        intent.putExtra(THURSDAY, thur);
+        intent.putExtra(FRIDAY, fri);
+        intent.putExtra(SATURDAY, sat);
+        intent.putExtra(SUNDAY, sun);
+        intent.putExtra(DESCRIPTION, description);
+        intent.putExtra(IMAGE,image);
+
+        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, min);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        // if alarm time has already passed, increment day by 1
+        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
+        }
+
+        if (!recurring) {
+            String toastText = null;
+            try {
+                toastText = String.format("One Time Alarm %s scheduled for %s at %02d:%02d", description, toDay(calendar.get(Calendar.DAY_OF_WEEK)), hour, min, id);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
+
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmPendingIntent);
+
+        } else {
+            String toastText = String.format("Recurring Alarm %s scheduled for %s at %02d:%02d", description, getRecurringDaysText(), hour, min, id);
+            Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
+
+            final long RUN_DAILY = 24 * 60 * 60 * 1000;
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), RUN_DAILY,alarmPendingIntent);
+        }
+
+        this.alarmOn = true;
+    }
+
+
+    public static final String toDay(int day) throws Exception {
+        switch (day) {
+            case Calendar.SUNDAY:
+                return "Sunday";
+            case Calendar.MONDAY:
+                return "Monday";
+            case Calendar.TUESDAY:
+                return "Tuesday";
+            case Calendar.WEDNESDAY:
+                return "Wednesday";
+            case Calendar.THURSDAY:
+                return "Thursday";
+            case Calendar.FRIDAY:
+                return "Friday";
+            case Calendar.SATURDAY:
+                return "Saturday";
+        }
+        throw new Exception("Could not locate day");
+    }
+
+
+    public String getRecurringDaysText() {
+        if (!recurring) {
+            return null;
+        }
+
+        String days = "";
+        if (mon) {
+            days += "Mon ";
+        }
+        if (tue) {
+            days += "Tue ";
+        }
+        if (wed) {
+            days += "Wed ";
+        }
+        if (thur) {
+            days += "Thur ";
+        }
+        if (fri) {
+            days += "Fri ";
+        }
+        if (sat) {
+            days += "Sat ";
+        }
+        if (sun) {
+            days += "Sun ";
+        }
+
+        return days;
+    }
+
 }

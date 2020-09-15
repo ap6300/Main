@@ -52,9 +52,11 @@ public class DreamFragment extends Fragment  {
             list.add(new Dreamboard( price, image));
         }
 
+
+
         arrayAdpt.notifyDataSetChanged();
 
-
+        db.close();
 
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {

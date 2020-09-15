@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 public class AlarmDatabase {
@@ -39,7 +38,7 @@ public class AlarmDatabase {
         return db.rawQuery(sql, null);
     }
 
-    public boolean addRow(int hour,int min, String description,int alarmOn, int recurring, int mon, int tue, int wed, int thur, int fri, int sat, int sun, byte[] image) {
+    public boolean addRow(int hour, int min, String description, int alarmOn, int recurring, int mon, int tue, int wed, int thur, int fri, int sat, int sun, byte[] image) {
         synchronized(this.db) {
 
             ContentValues newAlarm = new ContentValues();
@@ -58,28 +57,45 @@ public class AlarmDatabase {
             newAlarm.put("image", image);
             try {
                 db.insertOrThrow(DB_TABLE, null, newAlarm);
+
             } catch (Exception e) {
                 Log.e("Error in inserting rows", e.toString());
                 e.printStackTrace();
                 return false;
             }
-            //db.close();
+            db.close();
             return true;
         }
     }
 
 
-    void updateData(String name, byte[] image, String hold) {
+    boolean updateData(int id, int hour, int min, String description, int alarmOn, int recurring, int mon, int tue, int wed, int thur, int fri, int sat, int sun, byte[] image) {
         db = helper.getReadableDatabase();
 
-        String sql = "UPDATE Dreamboard SET description = ?, image = ? WHERE description = ?";
-        SQLiteStatement statement = db.compileStatement(sql);
+        ContentValues newAlarm = new ContentValues();
+        newAlarm.put("hour",hour);
+        newAlarm.put("min",min);
+        newAlarm.put("description", description);
+        newAlarm.put("alarmOn",alarmOn);
+        newAlarm.put("recurring",recurring);
+        newAlarm.put("mon",mon);
+        newAlarm.put("tue",tue);
+        newAlarm.put("wed",wed);
+        newAlarm.put("thur",thur);
+        newAlarm.put("fri",fri);
+        newAlarm.put("sat",sat);
+        newAlarm.put("sun",sun);
+        newAlarm.put("image", image);
+        try {
+            db.update(DB_TABLE, newAlarm,  "id  = '" + id + "'",null);
 
-        statement.bindString(1, name);
-        statement.bindBlob(2, image);
-        statement.bindString(3, hold);
-
-        statement.execute();
+        } catch (Exception e) {
+            Log.e("Error in inserting rows", e.toString());
+            e.printStackTrace();
+            return false;
+        }
+        db.close();
+        return true;
 
     }
     public void clearRecords()
@@ -88,22 +104,18 @@ public class AlarmDatabase {
         db.delete(DB_TABLE, null, null);
     }
 
-
-    public  void deleteData(String name) {
-        db = helper.getReadableDatabase();
-
-        String sql = "DELETE FROM Dreamboard WHERE description = ?";
-        SQLiteStatement statement = db.compileStatement(sql);
-        statement.clearBindings();
-        statement.bindString(1, name);
-
-        statement.execute();
-
+    public void close() {
+        helper.close();
     }
 
 
+    public  void deleteData(int id) {
+        db = helper.getReadableDatabase();
 
+        db = helper.getWritableDatabase();
+        db.delete(DB_TABLE,   "id = \"" + id + "\"", null);
 
+    }
 
 
 

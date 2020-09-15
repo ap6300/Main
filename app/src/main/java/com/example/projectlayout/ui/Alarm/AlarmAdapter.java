@@ -48,10 +48,7 @@ public class AlarmAdapter extends BaseAdapter {
         if (listItem == null) {
             listItem = LayoutInflater.from(mContext).inflate(R.layout.custom_recyclerview_alarm, parent, false);
 
-
             Alarm alarm = list.get(position);
-
-
 
             TextView alarmTime = listItem.findViewById(R.id.item_alarm_time);
             Switch alarmStarted = listItem.findViewById(R.id.item_alarm_started);
@@ -88,9 +85,6 @@ public class AlarmAdapter extends BaseAdapter {
             byte[] recordImage = alarm.getImage();
             Bitmap bitmap = BitmapFactory.decodeByteArray(recordImage, 0, recordImage.length);
             holder.imageView.setImageBitmap(bitmap);
-
-
-
 
         }
 

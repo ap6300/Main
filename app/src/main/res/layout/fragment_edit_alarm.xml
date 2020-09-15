@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Alarm.fragment_addAlarm"
+    tools:context=".ui.Alarm.fragment_editAlarm"
     android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
 
     <TimePicker
-        android:id="@+id/timePicker1"
+        android:id="@+id/timePicker1_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:timePickerMode="spinner"
@@ -35,7 +35,7 @@
             android:textSize="18sp" />
 
         <EditText
-            android:id="@+id/description_add_alarm"
+            android:id="@+id/description_edit_alarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -75,7 +75,7 @@
 
 
         <CheckBox
-            android:id="@+id/repeat"
+            android:id="@+id/repeat_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
@@ -91,7 +91,7 @@
         android:background="@android:color/darker_gray"/>
 
     <LinearLayout
-        android:id="@+id/repeat_day_checkBox"
+        android:id="@+id/repeat_day_checkBox_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
@@ -103,49 +103,49 @@
         android:visibility="gone">
 
         <CheckBox
-            android:id="@+id/Mon"
+            android:id="@+id/Mon_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Mon" />
 
         <CheckBox
-            android:id="@+id/Tue"
+            android:id="@+id/Tue_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Tue" />
 
         <CheckBox
-            android:id="@+id/Wed"
+            android:id="@+id/Wed_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Wed" />
 
         <CheckBox
-            android:id="@+id/Thur"
+            android:id="@+id/Thur_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Thur" />
 
         <CheckBox
-            android:id="@+id/Fri"
+            android:id="@+id/Fri_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Fri" />
 
         <CheckBox
-            android:id="@+id/Sat"
+            android:id="@+id/Sat_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Sat" />
 
         <CheckBox
-            android:id="@+id/Sun"
+            android:id="@+id/Sun_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -154,7 +154,7 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/day_line"
+        android:id="@+id/day_line_edit"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="10dp"
@@ -180,7 +180,7 @@
             android:textSize="18sp" />
 
         <ImageView
-            android:id="@+id/imageView_add_alarm"
+            android:id="@+id/imageView_edit_alarm"
             android:layout_width="wrap_content"
             android:layout_height="91dp"
             android:layout_weight="2"
@@ -192,11 +192,27 @@
         android:layout_marginEnd="10dp"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
     <Button
-        android:id="@+id/add_button"
+        android:id="@+id/updateAlarm_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Button" />
+        android:text="Update"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/deleteAlarm_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Delete"
+        android:textColor="#FFFFFF"/>
 
 </LinearLayout>

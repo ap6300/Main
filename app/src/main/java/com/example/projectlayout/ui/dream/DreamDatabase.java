@@ -49,6 +49,7 @@ public class DreamDatabase {
         statement.bindString(3, hold);
 
         statement.execute();
+        db.close();
 
     }
 
@@ -62,6 +63,7 @@ public class DreamDatabase {
         statement.bindString(1, name);
 
         statement.execute();
+        db.close();
 
     }
 
@@ -82,7 +84,7 @@ public class DreamDatabase {
                 e.printStackTrace();
                 return false;
             }
-            //db.close();
+            db.close();
             return true;
         }
     }
