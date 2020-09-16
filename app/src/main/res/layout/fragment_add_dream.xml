@@ -12,8 +12,15 @@
         android:layout_width="185dp"
         android:layout_height="185dp"
         android:layout_gravity="center"
-        android:src="@drawable/ic_menu_camera"
+        android:src="@drawable/ic_outline_photo_library_24"
         />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Click to select photo from album"
+        android:textAlignment="center"/>
 
 
 <LinearLayout
@@ -45,8 +52,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Button"
-        android:textColor="#FFFFFF"
-        />
+        android:backgroundTint="#4567C5"
+        android:text="Add Photo"
+        android:textColor="#FFFFFF" />
+
+
 
 </LinearLayout>
