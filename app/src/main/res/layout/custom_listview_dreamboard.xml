@@ -11,8 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="8dp"
-
-
         android:backgroundTint="#FFFFFF"
         android:descendantFocusability="blocksDescendants"
         app:cardCornerRadius="25dp"
@@ -21,7 +19,7 @@
         <FrameLayout
             android:layout_width="300dp"
             android:layout_height="25dp"
-            android:background="#0000ff">
+            android:background="#ccccff">
 
         </FrameLayout>
 

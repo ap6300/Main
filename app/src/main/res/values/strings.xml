@@ -7,7 +7,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
+    <string name="menu_home">My Wants</string>
     <string name="menu_wants">Wants</string>
     <string name="menu_alarm">Alarm</string>
     <string name="menu_dream">Dream</string>

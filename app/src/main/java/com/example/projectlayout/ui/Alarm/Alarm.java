@@ -1,25 +1,30 @@
 package com.example.projectlayout.ui.Alarm;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.example.projectlayout.Receiver;
+
 import java.util.Calendar;
 
-import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.DESCRIPTION;
-import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.FRIDAY;
-import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.IMAGE;
-import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.MONDAY;
-import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.RECURRING;
-import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.SATURDAY;
-import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.SUNDAY;
-import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.THURSDAY;
-import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.TUESDAY;
-import static com.example.projectlayout.ui.Alarm.AlarmBroadcastReceiver.WEDNESDAY;
-
 public class Alarm {
+
+    public static final String MONDAY = "MONDAY";
+    public static final String TUESDAY = "TUESDAY";
+    public static final String WEDNESDAY = "WEDNESDAY";
+    public static final String THURSDAY = "THURSDAY";
+    public static final String FRIDAY = "FRIDAY";
+    public static final String SATURDAY = "SATURDAY";
+    public static final String SUNDAY = "SUNDAY";
+    public static final String RECURRING = "RECURRING";
+    public static final String DESCRIPTION = "DESCRIPTION";
+    public static final String ID = "ID";
+
+
 
     private int id;
     private int hour;
@@ -171,7 +176,7 @@ public class Alarm {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+        Intent intent = new Intent(context, Receiver.class);
         intent.putExtra(RECURRING, recurring);
         intent.putExtra(MONDAY, mon);
         intent.putExtra(TUESDAY, tue);
@@ -180,8 +185,9 @@ public class Alarm {
         intent.putExtra(FRIDAY, fri);
         intent.putExtra(SATURDAY, sat);
         intent.putExtra(SUNDAY, sun);
-        intent.putExtra(DESCRIPTION, description);
-        intent.putExtra(IMAGE,image);
+        intent.putExtra(DESCRIPTION,description);
+        intent.putExtra(ID,id);
+
 
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
 
@@ -200,21 +206,32 @@ public class Alarm {
         if (!recurring) {
             String toastText = null;
             try {
-                toastText = String.format("One Time Alarm %s scheduled for %s at %02d:%02d", description, toDay(calendar.get(Calendar.DAY_OF_WEEK)), hour, min, id);
+                toastText = String.format("One Time Alarm scheduled for %s at %02d:%02d",  toDay(calendar.get(Calendar.DAY_OF_WEEK)), hour, min, id);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
 
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmPendingIntent);
-
+            alarmManager.setExact(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    alarmPendingIntent
+            );
         } else {
-            String toastText = String.format("Recurring Alarm %s scheduled for %s at %02d:%02d", description, getRecurringDaysText(), hour, min, id);
+            @SuppressLint("DefaultLocale") String toastText = String.format("Recurring Alarm  scheduled for %s at %02d:%02d",  getRecurringDaysText(), hour, min, id);
             Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
 
             final long RUN_DAILY = 24 * 60 * 60 * 1000;
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), RUN_DAILY,alarmPendingIntent);
+            alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    RUN_DAILY,
+                    alarmPendingIntent
+            );
         }
+
+
+
 
         this.alarmOn = true;
     }

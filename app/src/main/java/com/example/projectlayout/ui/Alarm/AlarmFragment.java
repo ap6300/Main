@@ -35,14 +35,14 @@ public class AlarmFragment extends Fragment {
 
         ArrayList<Alarm> list = new ArrayList<>();
         list.clear();
-        AlarmAdapter alarmAdapter = new AlarmAdapter(getContext(),list);
-        recyclerView.setAdapter(alarmAdapter);
 
-        AlarmDatabase db = new AlarmDatabase(getActivity());
+
+        AlarmDatabase db = new AlarmDatabase(getContext());
         db.openReadable();
 
+        byte[] image = null;
 
-        Cursor cursor = db.getData("SELECT * FROM Alarm");
+        Cursor cursor = db.getData1("SELECT * FROM Alarm");
 
         while (cursor.moveToNext()) {
 
@@ -52,50 +52,36 @@ public class AlarmFragment extends Fragment {
             String description = cursor.getString(3);;
 
             boolean alarmOn = false;
-            if(cursor.getInt(4) == 1){
-                alarmOn = true;
-            }
+            if(cursor.getInt(4) == 1){ alarmOn = true; }
 
             boolean recurring = false;
-            if(cursor.getInt(5) == 1){
-                recurring = true;
-            }
+            if(cursor.getInt(5) == 1){ recurring = true; }
 
             boolean mon = false;
-            if(cursor.getInt(6) == 1){
-                mon = true;
-            }
+            if(cursor.getInt(6) == 1){ mon = true; }
             boolean tue = false;
-            if(cursor.getInt(7) == 1){
-                tue = true;
-            }
+            if(cursor.getInt(7) == 1){ tue = true; }
             boolean wed = false;
-            if(cursor.getInt(8) == 1){
-                wed = true;
-            }
+            if(cursor.getInt(8) == 1){ wed = true; }
             boolean thur = false;
-            if(cursor.getInt(9) == 1){
-                thur = true;
-            }
+            if(cursor.getInt(9) == 1){ thur = true;}
             boolean fri = false;
-            if(cursor.getInt(10) == 1){
-                fri = true;
-            }
+            if(cursor.getInt(10) == 1){ fri = true; }
             boolean sat = false;
-            if(cursor.getInt(11) == 1){
-                sat = true;
-            }
+            if(cursor.getInt(11) == 1){ sat = true; }
             boolean sun = false;
-            if(cursor.getInt(12) == 1){
-                sun = true;
-            }
+            if(cursor.getInt(12) == 1){ sun = true; }
 
-            byte[] image = cursor.getBlob(13);
+            image = cursor.getBlob(13);
 
             list.add(new Alarm(id,hour,min,description,alarmOn,recurring,mon,tue,wed,thur,fri,sat,sun,image));
 
 
         }
+
+        AlarmAdapter alarmAdapter = new AlarmAdapter(getContext(),list);
+        recyclerView.setAdapter(alarmAdapter);
+
         alarmAdapter.notifyDataSetChanged();
         db.close();
 

@@ -68,7 +68,6 @@
             android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginStart="5dp"
             android:text="Repeat"
             android:textColor="#000000"
             android:textSize="18sp" />

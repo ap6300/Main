@@ -10,13 +10,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.projectlayout.ui.dream.DreamDatabase;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity  {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private DreamDatabase db;
+
 
 
 
@@ -26,9 +25,6 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        db = new DreamDatabase(MainActivity.this);
-        db.openReadable();
 
 
 
@@ -47,14 +43,6 @@ public class MainActivity extends AppCompatActivity  {
 
 
     }
-
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }*/
 
     @Override
     public boolean onSupportNavigateUp() {
