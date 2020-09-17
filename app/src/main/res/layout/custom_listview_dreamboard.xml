@@ -14,14 +14,14 @@
         android:backgroundTint="#FFFFFF"
         android:descendantFocusability="blocksDescendants"
         app:cardCornerRadius="25dp"
-        app:cardElevation="6dp">
+        app:cardElevation="10dp">
 
-        <FrameLayout
-            android:layout_width="300dp"
-            android:layout_height="25dp"
-            android:background="#ccccff">
-
-        </FrameLayout>
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            app:srcCompat="@drawable/clipart1053944" />
 
         <LinearLayout
             android:layout_width="300dp"
@@ -30,7 +30,7 @@
 
             <ImageView
                 android:id="@+id/imageView_listView"
-                android:layout_width="200dp"
+                android:layout_width="240dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp" />
@@ -40,7 +40,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="30sp" />
+                android:fontFamily="casual"
+                android:textSize="24sp"  />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

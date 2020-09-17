@@ -45,6 +45,7 @@
         android:id="@+id/update_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#4567C5"
         android:text="update"
         android:layout_gravity="center"
         android:textColor="#FFFFFF"/>
@@ -53,6 +54,7 @@
         android:id="@+id/delete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#4567C5"
         android:text="delete"
         android:layout_gravity="center"
         android:textColor="#FFFFFF"/>
