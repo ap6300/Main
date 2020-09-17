@@ -11,6 +11,9 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
 
+        <action
+            android:id="@+id/action_nav_home_to_bookFragment"
+            app:destination="@id/bookFragment" />
     </fragment>
 
 
@@ -47,7 +50,7 @@
     <fragment
         android:id="@+id/fragment_addDream"
         android:name="com.example.projectlayout.ui.dream.fragment_addDream"
-        android:label="fragment_add_dream"
+        android:label="Add Dream"
         tools:layout="@layout/fragment_add_dream" >
         <action
             android:id="@+id/action_fragment_addDream_to_nav_dream"
@@ -56,7 +59,7 @@
     <fragment
         android:id="@+id/fragment_editDream"
         android:name="com.example.projectlayout.ui.dream.fragment_editDream"
-        android:label="fragment_edit_dream"
+        android:label="Edit Dream"
         tools:layout="@layout/fragment_edit_dream" >
         <action
             android:id="@+id/action_fragment_editDream_to_nav_dream"
@@ -65,7 +68,7 @@
     <fragment
         android:id="@+id/fragment_addAlarm"
         android:name="com.example.projectlayout.ui.Alarm.fragment_addAlarm"
-        android:label="fragment_add_alarm"
+        android:label="Add Alarm"
         tools:layout="@layout/fragment_add_alarm" >
         <action
             android:id="@+id/action_fragment_addAlarm_to_nav_alarm"
@@ -74,12 +77,17 @@
     <fragment
         android:id="@+id/fragment_editAlarm"
         android:name="com.example.projectlayout.ui.Alarm.fragment_editAlarm"
-        android:label="fragment_edit_alarm"
+        android:label="Edit Alarm"
         tools:layout="@layout/fragment_edit_alarm" >
         <action
             android:id="@+id/action_fragment_editAlarm_to_nav_alarm"
             app:destination="@id/nav_alarm" />
     </fragment>
+    <fragment
+        android:id="@+id/bookFragment"
+        android:name="com.example.projectlayout.ui.home.BookFragment"
+        android:label="Book"
+        tools:layout="@layout/fragment_book" />
 
 
 </navigation>

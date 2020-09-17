@@ -57,6 +57,11 @@ public class WantsDatabasee {
         }
     }
 
+    public void clear()
+    {
+        db = helper.getWritableDatabase();
+        db.delete(DB_TABLE, null, null);
+    }
 
 
     public void clearRecords(String name)

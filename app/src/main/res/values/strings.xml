@@ -2,7 +2,7 @@
     <string name="app_name">ProjectLayout</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">My Want</string>
+    <string name="nav_header_title">My Wants</string>
     <string name="nav_header_subtitle">An APP that makes a Difference</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
@@ -11,6 +11,7 @@
     <string name="menu_wants">Wants</string>
     <string name="menu_alarm">Alarm</string>
     <string name="menu_dream">Dream</string>
+
 
     <string name="home_second">Home Second</string>
     <string name="title_activity_book">book</string>

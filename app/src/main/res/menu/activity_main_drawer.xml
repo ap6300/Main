@@ -21,5 +21,10 @@
             android:icon="@drawable/ic_menu_dream_24dp"
             android:title="@string/menu_dream" />
 
+        <item
+            android:id="@+id/bookFragment"
+            android:icon="@drawable/ic_book_black_24dp"
+            android:title="Book" />
+
     </group>
 </menu>

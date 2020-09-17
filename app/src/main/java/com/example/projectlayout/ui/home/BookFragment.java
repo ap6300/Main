@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 import com.example.projectlayout.R;
+import com.github.barteksc.pdfviewer.PDFView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +60,11 @@ public class BookFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_book, container, false);
+       View root = inflater.inflate(R.layout.fragment_book, container, false);
+
+        PDFView mPDFView = root.findViewById(R.id.pdfView);
+        mPDFView.fromAsset("book.pdf").load();
+
+       return root;
     }
 }

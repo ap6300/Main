@@ -49,6 +49,7 @@ public class WantsFragment extends Fragment {
         mydatabase = new WantsDatabasee(getActivity());
 
         mydatabase.openReadable();
+        mydatabase.clear();
 
         ArrayList<want> item = new ArrayList<>();
 

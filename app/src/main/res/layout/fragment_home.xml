@@ -43,7 +43,6 @@
             android:scaleType="fitCenter"
             android:src="@drawable/book_cover"
             android:background="#000000"
-            android:onClick="onClick"
             tools:src="@drawable/book_cover" />
 
         <ImageButton
