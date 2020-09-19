@@ -6,9 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.projectlayout.R;
-import com.github.barteksc.pdfviewer.PDFView;
+import com.wajahatkarim3.easyflipviewpager.BookFlipPageTransformer2;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,10 +51,6 @@ public class BookFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -61,9 +58,18 @@ public class BookFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
        View root = inflater.inflate(R.layout.fragment_book, container, false);
+       int[] bookImage = new int[]{R.drawable.book1,R.drawable.book2,R.drawable.book3,R.drawable.book4,R.drawable.book5,R.drawable.book6,R.drawable.book7,R.drawable.book8,R.drawable.book9,R.drawable.book10,
+                                R.drawable.book11,R.drawable.book12};
 
-        PDFView mPDFView = root.findViewById(R.id.pdfView);
-        mPDFView.fromAsset("book.pdf").load();
+        ViewPager2 book = root.findViewById(R.id.bookView);
+        bookRecyclerAdapter bookRecyclerAdapter = new bookRecyclerAdapter(bookImage);
+        book.setAdapter(bookRecyclerAdapter);
+
+        BookFlipPageTransformer2 bookFlipPageTransformer = new BookFlipPageTransformer2();
+        bookFlipPageTransformer.setEnableScale(true);
+        bookFlipPageTransformer.setScaleAmountPercent(10f);
+        book.setPageTransformer(bookFlipPageTransformer);
+
 
        return root;
     }

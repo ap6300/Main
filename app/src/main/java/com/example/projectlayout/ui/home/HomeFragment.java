@@ -42,6 +42,7 @@ public class HomeFragment extends Fragment{
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
                 String videoId = "S0Q4gqBUs7c";
                 youTubePlayer.loadVideo(videoId, 0);
+                youTubePlayer.pause();
             }
         });
 
