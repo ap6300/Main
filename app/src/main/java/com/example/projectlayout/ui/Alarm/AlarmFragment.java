@@ -108,8 +108,8 @@ public class AlarmFragment extends Fragment {
 
 
 
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_alarm, menu);
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_addicon, menu);
         super.onCreateOptionsMenu(menu, inflater);
 
     }
@@ -122,7 +122,7 @@ public class AlarmFragment extends Fragment {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.add_alarm) {
+        if (id == R.id.add_toolbar) {
             NavHostFragment.findNavController(AlarmFragment.this)
                     .navigate(R.id.action_nav_alarm_to_fragment_addAlarm);
             return true;

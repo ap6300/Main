@@ -3,6 +3,9 @@ package com.example.projectlayout.ui.dream;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -29,6 +32,9 @@ public class DreamFragment extends Fragment  {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_dream, container, false);
+
+        setHasOptionsMenu(true);
+
 
 
         //ListView
@@ -75,17 +81,29 @@ public class DreamFragment extends Fragment  {
            }
         });
 
-        fab.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                NavHostFragment.findNavController(DreamFragment.this)
-                        .navigate(R.id.action_nav_dream_to_fragment_addDream);
-
-            }
-        });
-
         return root;
+    }
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_addicon, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.add_toolbar) {
+            NavHostFragment.findNavController(DreamFragment.this)
+                    .navigate(R.id.action_nav_dream_to_fragment_addDream);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
