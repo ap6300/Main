@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.projectlayout.R;
@@ -15,10 +16,11 @@ public class bookRecyclerAdapter extends RecyclerView.Adapter<bookRecyclerAdapte
     private final int[] mValues;
     private Context mContext;
 
-    public bookRecyclerAdapter(int[] items) {
+    bookRecyclerAdapter(int[] items) {
         this.mValues = items;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -29,8 +31,12 @@ public class bookRecyclerAdapter extends RecyclerView.Adapter<bookRecyclerAdapte
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mImageView.setImageResource(mValues[position]);
+
+        //Set the background to be back for the book cover else be white background
         if(mValues[position] == (R.drawable.book1)) {
             holder.mImageView.setBackgroundColor(Color.BLACK);
+        }else{
+            holder.mImageView.setBackgroundColor(Color.WHITE);
         }
     }
 
@@ -39,12 +45,12 @@ public class bookRecyclerAdapter extends RecyclerView.Adapter<bookRecyclerAdapte
         return mValues.length;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final ImageView mImageView;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        final View mView;
+        final ImageView mImageView;
 
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             mView = view;
             mImageView = view.findViewById(R.id.bookImg);
