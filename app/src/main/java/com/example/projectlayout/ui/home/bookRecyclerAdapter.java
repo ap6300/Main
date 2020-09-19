@@ -1,6 +1,7 @@
 package com.example.projectlayout.ui.home;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,9 @@ public class bookRecyclerAdapter extends RecyclerView.Adapter<bookRecyclerAdapte
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mImageView.setImageResource(mValues[position]);
+        if(mValues[position] == (R.drawable.book1)) {
+            holder.mImageView.setBackgroundColor(Color.BLACK);
+        }
     }
 
     @Override

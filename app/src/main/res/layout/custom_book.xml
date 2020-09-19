@@ -7,31 +7,24 @@
     android:background="#C5C5C5"
     android:backgroundTint="#DADADA">
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="355dp"
-        android:layout_height="530dp"
 
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="25dp"
-        android:background="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/bookImg"
-        android:layout_width="355dp"
-        android:layout_height="580dp"
-
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginStart="30dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="25dp"
-        android:scaleType="fitCenter" />
+        android:background="#FFFFFF">
+
+        <ImageView
+            android:id="@+id/bookImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+
+            android:scaleType="fitCenter" />
+    </FrameLayout>
 
 
 </RelativeLayout>
