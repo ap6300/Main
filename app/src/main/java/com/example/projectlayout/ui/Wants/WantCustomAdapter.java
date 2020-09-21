@@ -15,14 +15,14 @@ import com.example.projectlayout.R;
 
 import java.util.ArrayList;
 
-public class CustomAdapter extends ArrayAdapter {
+public class WantCustomAdapter extends ArrayAdapter {
     private ArrayList<want> dataSet;
     private Context mContext;
     private static class ViewHolder {
         TextView txtName;
         CheckBox checkBox;
     }
-    CustomAdapter(ArrayList<want> data, Context context) {
+    public WantCustomAdapter(ArrayList<want> data, Context context) {
         super(context, R.layout.fragment_wants, data);
         this.dataSet = data;
         this.mContext = context;
@@ -38,17 +38,17 @@ public class CustomAdapter extends ArrayAdapter {
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent){
-        ViewHolder viewHolder;
+        WantCustomAdapter.ViewHolder viewHolder;
         final View result;
         if (convertView == null) {
-            viewHolder = new ViewHolder();
+            viewHolder = new WantCustomAdapter.ViewHolder();
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.rowlayout, parent, false);
             viewHolder.txtName = convertView.findViewById(R.id.label);
             viewHolder.checkBox = convertView.findViewById(R.id.checkBox);
             result=convertView;
             convertView.setTag(viewHolder);
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = (WantCustomAdapter.ViewHolder) convertView.getTag();
             result=convertView;
         }
         final want item = dataSet.get(position);
@@ -61,7 +61,7 @@ public class CustomAdapter extends ArrayAdapter {
             viewHolder.checkBox.setChecked(false);
         }
 
-        final DontWantDatabase mydatabase = new DontWantDatabase(getContext());
+        final WantDatabase mydatabase = new WantDatabase(getContext());
 
         mydatabase.openReadable();
 
@@ -72,11 +72,11 @@ public class CustomAdapter extends ArrayAdapter {
                 {
                     mydatabase.updateIsChecked(item.name);
                 }
-                 else
+                else
                 {
                     mydatabase.updateIsNotChecked(item.name);
-            }
-        }});
+                }
+            }});
 
 
         return result;

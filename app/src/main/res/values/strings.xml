@@ -31,5 +31,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_ring">ringActivity</string>
     <string name="for_book_page">For Book page</string>
+    <string name="tab_item_dont_want">Don\'t Want</string>
+    <string name="tab_item_want">Want</string>
 
 </resources>

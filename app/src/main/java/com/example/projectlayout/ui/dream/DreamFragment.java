@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.projectlayout.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -38,17 +37,13 @@ public class DreamFragment extends Fragment  {
 
 
         //ListView
-        GridView gridview = (GridView) root.findViewById(R.id.gridview);
+        GridView gridview = root.findViewById(R.id.gridview);
 
-        FloatingActionButton fab = root.findViewById(R.id.floatingActionButton3);
 
         DreamDatabase db = new DreamDatabase(getActivity());
         db.openReadable();
 
         ArrayList<Dreamboard> list = new ArrayList<>();
-        ImageAdapter arrayAdpt = new ImageAdapter(getContext(), list);
-        gridview.setAdapter(arrayAdpt);
-
         Cursor cursor = db.getData("SELECT * FROM Dreamboard");
         list.clear();
         while (cursor.moveToNext()) {
@@ -57,10 +52,8 @@ public class DreamFragment extends Fragment  {
 
             list.add(new Dreamboard( price, image));
         }
-
-
-
-        arrayAdpt.notifyDataSetChanged();
+        ImageAdapter arrayAdpt = new ImageAdapter(getContext(), list);
+        gridview.setAdapter(arrayAdpt);
 
         db.close();
 
@@ -84,7 +77,7 @@ public class DreamFragment extends Fragment  {
         return root;
     }
 
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_addicon, menu);
         super.onCreateOptionsMenu(menu, inflater);
 

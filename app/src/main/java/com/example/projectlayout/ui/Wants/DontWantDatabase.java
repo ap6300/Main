@@ -8,32 +8,47 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
-public class WantsDatabasee {
+import java.util.ArrayList;
 
-    public static final String DB_NAME = "ListInformation";
-    public static final String DB_TABLE = "Task";
-    public static final int DB_VERSION = 1;
+public class DontWantDatabase {
+
+    private static final String DB_NAME = "ListInformation";
+    private static final String DB_TABLE = "Task";
+    private static final int DB_VERSION = 1;
     private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE + " (item VARCHAR, checked INTERGER)";
     private SQLHelper helper;
     private SQLiteDatabase db;
     private Context context;
 
-    public WantsDatabasee(Context c) {
+    public DontWantDatabase(Context c) {
         this.context = c;
-        helper = new WantsDatabasee.SQLHelper(c);
+        helper = new DontWantDatabase.SQLHelper(c);
         this.db = helper.getWritableDatabase();
     }
 
-    public WantsDatabasee openReadable() throws android.database.SQLException {
+    public DontWantDatabase openReadable() throws android.database.SQLException {
         helper = new SQLHelper(context);
         db = helper.getReadableDatabase();
         return this;
     }
 
-    Cursor getData(String sql){
+
+
+    ArrayList<want> getDontWantItem(){
+        ArrayList<want> item = new ArrayList<>();
         db= helper.getReadableDatabase();
-        return db.rawQuery(sql, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM Task", null);
+        while (cursor.moveToNext()) {
+            String task = cursor.getString(0);
+            int checked = cursor.getInt(1);
+
+            item.add(new want( task, checked));
+        }
+        return item;
     }
+
+
+
 
     public void close() {
         helper.close();
@@ -47,7 +62,7 @@ public class WantsDatabasee {
             newFriend.put("checked", c);
 
             try {
-                db.insertOrThrow(DB_TABLE, null, newFriend);
+                db.insert(DB_TABLE,null,newFriend);
             } catch (Exception e) {
                 Log.e("Error in inserting rows", e.toString());
                 e.printStackTrace();

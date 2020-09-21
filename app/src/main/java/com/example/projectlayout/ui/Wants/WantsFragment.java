@@ -2,77 +2,93 @@ package com.example.projectlayout.ui.Wants;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TableLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.example.projectlayout.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
 public class WantsFragment extends Fragment {
 
-    private WantsViewModel galleryViewModel;
-    private WantsDatabasee mydatabase;
-    private TextView response;
+
+    private DontWantDatabase dontWantdb;
+    private WantDatabase wantdb;
     private ListView productRec;
-    private EditText phone, name, address, gender;
-    private Button addButton;
-    private TableLayout addLayout;
-    private boolean Inserted;
     private CustomAdapter adt;
+    private WantCustomAdapter adt1;
+    private ArrayList<want> item = new ArrayList<>();
+    private ArrayList<want> item1 = new ArrayList<>();
+    private TabLayout tab;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        galleryViewModel =
-                ViewModelProviders.of(this).get(WantsViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_wants, container, false);
         setHasOptionsMenu(true);
 
         FloatingActionButton fab = root.findViewById(R.id.floatingActionButton2);
 
-        productRec = (ListView)root.findViewById(R.id.prodrec);
+        productRec = root.findViewById(R.id.prodrec);
 
-        mydatabase = new WantsDatabasee(getActivity());
+        dontWantdb = new DontWantDatabase(getActivity());
+        dontWantdb.openReadable();
 
-        mydatabase.openReadable();
-        mydatabase.clear();
+        wantdb = new WantDatabase(getActivity());
+        wantdb.openReadable();
 
-        ArrayList<want> item = new ArrayList<>();
+        item.clear();
+        item = dontWantdb.getDontWantItem();
+
 
         adt = new CustomAdapter(item,getContext());
         productRec.setAdapter(adt);
 
-        Cursor cursor = mydatabase.getData("SELECT * FROM Task");
-        item.clear();
-        while (cursor.moveToNext()) {
-            String task = cursor.getString(0);
-            int checked = cursor.getInt(1);
 
-            item.add(new want( task, checked));
-        }
-        adt.notifyDataSetChanged();
+        tab = root.findViewById(R.id.tabLayout);
+
+        tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if(tab.getPosition()==1){
+                    item1.clear();
+                    item1 = wantdb.getWantItem();
+                    adt1 = new WantCustomAdapter(item1,getContext());
+                    productRec.setAdapter(adt1);
+                } else if(tab.getPosition()==0) {
+
+                    item.clear();
+                    item = dontWantdb.getDontWantItem();
+                    adt = new CustomAdapter(item, getContext());
+                    productRec.setAdapter(adt);
+                }
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
                 showAlertDialogButtonClicked(getView());
-                adt.notifyDataSetChanged();
-
             }
         });
 
@@ -84,7 +100,7 @@ public class WantsFragment extends Fragment {
 
 
 
-    public void showAlertDialogButtonClicked(View view) {
+    private void showAlertDialogButtonClicked(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Desire");
         final View customLayout = getLayoutInflater().inflate(R.layout.custom_add_item_first, null);
@@ -94,29 +110,36 @@ public class WantsFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 EditText editText = customLayout.findViewById(R.id.editTextTextPersonName);
 
-                mydatabase.openReadable();
-                Boolean work = mydatabase.addRow(editText.getText().toString(),0);
-                if(work){
-                    sendDialogDataToActivity(editText.getText().toString());
-                }else{
-                    Toast.makeText(getActivity(), "Failure", Toast.LENGTH_SHORT).show();
+                if(tab.getSelectedTabPosition()==1) {
+                    wantdb.openReadable();
+                    boolean work = wantdb.addRow(editText.getText().toString(), 0);
+                    wantdb.close();
+                    if (work) {
+                        sendDialogDataToActivity(editText.getText().toString());
+                    } else {
+                        Toast.makeText(getActivity(), "Failure", Toast.LENGTH_SHORT).show();
+                    }
+                    item1 = wantdb.getWantItem();
+                    adt1 = new WantCustomAdapter(item1,getContext());
+                    productRec.setAdapter(adt1);
+                    adt1.notifyDataSetChanged();
+
+
+                } else{
+                    dontWantdb.openReadable();
+                    boolean work = dontWantdb.addRow(editText.getText().toString(), 0);
+                    dontWantdb.close();
+                    if (work) {
+                        sendDialogDataToActivity(editText.getText().toString());
+                    } else {
+                        Toast.makeText(getActivity(), "Failure", Toast.LENGTH_SHORT).show();
+                    }
+                    item = dontWantdb.getDontWantItem();
+                    adt = new CustomAdapter(item,getContext());
+                    productRec.setAdapter(adt);
+                    adt.notifyDataSetChanged();
+
                 }
-                ArrayList<want> item = new ArrayList<>();
-
-                adt = new CustomAdapter(item,getContext());
-                productRec.setAdapter(adt);
-
-                Cursor cursor = mydatabase.getData("SELECT * FROM Task");
-                item.clear();
-                while (cursor.moveToNext()) {
-                    String task = cursor.getString(0);
-                    int checked = cursor.getInt(1);
-
-                    item.add(new want( task, checked));
-                }
-
-                adt.notifyDataSetChanged();
-
             }
         });
         AlertDialog dialog = builder.create();
@@ -127,6 +150,13 @@ public class WantsFragment extends Fragment {
         Toast.makeText(getActivity(), data, Toast.LENGTH_SHORT).show();
 
     }
+
+
+
+
+
+
+
 
 
 }
