@@ -97,7 +97,7 @@ public class DreamFragment extends Fragment  {
         if (id == R.id.add_toolbar) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Desire");
-            final View customLayout = getLayoutInflater().inflate(R.layout.custom_add, null);
+            final View customLayout = getLayoutInflater().inflate(R.layout.custom_add_dreamboard, null);
             builder.setView(customLayout);
             builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
                 @Override
