@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 
 public class DreamDatabase {
 
@@ -37,6 +39,22 @@ public class DreamDatabase {
         db = helper.getReadableDatabase();
         return db.rawQuery(sql, null);
     }
+
+
+
+    protected ArrayList<Dreamboard> getDream(){
+        ArrayList<Dreamboard> list = new ArrayList<Dreamboard>();
+        db= helper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Dreamboard", null);
+        while (cursor.moveToNext()) {
+            String price = cursor.getString(0);
+            byte[] image = cursor.getBlob(1);
+
+            list.add(new Dreamboard( price, image));
+        }
+        return list;
+    }
+
 
     void updateData(String name, byte[] image, String hold) {
         db = helper.getReadableDatabase();

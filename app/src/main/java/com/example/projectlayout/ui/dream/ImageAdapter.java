@@ -37,27 +37,23 @@ public class ImageAdapter extends BaseAdapter {
 
         if (listItem == null) {
             listItem = LayoutInflater.from(mContext).inflate(R.layout.custom_listview_dreamboard, parent, false);
-
-
-            Dreamboard dreamboard = list.get(position);
-
-            ImageView imageView = listItem.findViewById(R.id.imageView_listView);
-            TextView textView = listItem.findViewById(R.id.textView_listView);
-
-            holder.imageView = imageView;
-            holder.description = textView;
-            //set the custom view value
-            textView.setText(dreamboard.getName());
-            holder.description.setText(dreamboard.getName());
-
-            byte[] recordImage = dreamboard.getImage();
-            Bitmap bitmap = BitmapFactory.decodeByteArray(recordImage, 0, recordImage.length);
-            holder.imageView.setImageBitmap(bitmap);
-
-
-
-
         }
+        Dreamboard dreamboard = list.get(position);
+
+        ImageView imageView = listItem.findViewById(R.id.imageView_listView);
+        TextView textView = listItem.findViewById(R.id.textView_listView);
+
+        holder.imageView = imageView;
+        holder.description = textView;
+
+        //set the custom view value
+        textView.setText(dreamboard.getName());
+        holder.description.setText(dreamboard.getName());
+
+        byte[] recordImage = dreamboard.getImage();
+        Bitmap bitmap = BitmapFactory.decodeByteArray(recordImage, 0, recordImage.length);
+        holder.imageView.setImageBitmap(bitmap);
+
 
         return listItem;
     }

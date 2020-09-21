@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProjectLayout</string>
+    <string name="app_name">My Wants</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">My Wants</string>
@@ -11,7 +11,7 @@
     <string name="home_menu">Home</string>
     <string name="menu_wants">My Wants</string>
     <string name="menu_alarm">Alarm</string>
-    <string name="menu_dream">Dream</string>
+    <string name="menu_dream">Dreamboard</string>
     <string name="menu_book">Book</string>
 
 

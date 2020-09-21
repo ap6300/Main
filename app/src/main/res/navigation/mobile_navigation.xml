@@ -35,9 +35,6 @@
         android:label="@string/menu_dream"
         tools:layout="@layout/fragment_dream" >
         <action
-            android:id="@+id/action_nav_dream_to_fragment_addDream"
-            app:destination="@id/fragment_addDream" />
-        <action
             android:id="@+id/action_nav_dream_to_fragment_editDream"
             app:destination="@id/fragment_editDream" />
     </fragment>
@@ -47,15 +44,6 @@
         android:name="com.example.projectlayout.ui.Wants.WantsFragment"
         android:label="@string/menu_wants"
         tools:layout="@layout/fragment_wants" />
-    <fragment
-        android:id="@+id/fragment_addDream"
-        android:name="com.example.projectlayout.ui.dream.fragment_addDream"
-        android:label="Add Dream"
-        tools:layout="@layout/fragment_add_dream" >
-        <action
-            android:id="@+id/action_fragment_addDream_to_nav_dream"
-            app:destination="@id/nav_dream" />
-    </fragment>
     <fragment
         android:id="@+id/fragment_editDream"
         android:name="com.example.projectlayout.ui.dream.fragment_editDream"
