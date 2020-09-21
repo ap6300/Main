@@ -44,6 +44,7 @@ public class DontWantDatabase {
 
             item.add(new want( task, checked));
         }
+        cursor.close();
         return item;
     }
 

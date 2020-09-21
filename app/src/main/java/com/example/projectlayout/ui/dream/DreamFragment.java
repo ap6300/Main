@@ -58,16 +58,12 @@ public class DreamFragment extends Fragment  {
         View root = inflater.inflate(R.layout.fragment_dream, container, false);
 
         setHasOptionsMenu(true);
-
-
-
         //ListView
         gridview = root.findViewById(R.id.gridview);
 
-
+        //Fetch data from database and set to gridview
         db = new DreamDatabase(getActivity());
         db.openReadable();
-
         setUpAdapter();
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -100,55 +96,68 @@ public class DreamFragment extends Fragment  {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.add_toolbar) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Add Dreamboard");
-            final View customLayout = getLayoutInflater().inflate(R.layout.custom_add_dreamboard, null);
-            mImageView = customLayout.findViewById(R.id.image);
-            description = customLayout.findViewById(R.id.description);
-            mImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-                        //permission not granted, request it.
-                        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
-                        //show popup for runtime permission
-                        requestPermissions(permissions, PERMISSION_CODE);
-                    } else {
-                        //permission already granted
-                        pickImageFromGallery();
-                    }
-                }
-            });
-
-            builder.setView(customLayout);
-            builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (description.getText() != null && (int) mImageView.getTag() == 1) {
-                        recInserted = true;
-                        recInserted = db.addRow(Objects.requireNonNull(description.getText()).toString(), imageViewToByte(mImageView));
-                    }
-
-                    if (recInserted) {
-                        Toast.makeText(getActivity(), "Success add row", Toast.LENGTH_SHORT).show();
-
-                    } else {
-                        Toast.makeText(getActivity(), "Not Success add row", Toast.LENGTH_SHORT).show();
-                    }
-
-                    setUpAdapter();
-
-                }
-            });
-            AlertDialog dialog = builder.create();
-            dialog.show();
+        if (item.getItemId() == R.id.add_toolbar) {
+            showAlertDialogAddClicked(getView());
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void setUpAdapter(){
+        list = db.getDream();
+        arrayAdpt = new ImageAdapter(getContext(),list);
+        gridview.setAdapter(arrayAdpt);
+        db.close();
+    }
+
+    private void showAlertDialogAddClicked(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Add Dreamboard");
+        final View customLayout = getLayoutInflater().inflate(R.layout.custom_add_dreamboard, null);
+        mImageView = customLayout.findViewById(R.id.image);
+        description = customLayout.findViewById(R.id.description);
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                    //permission not granted, request it.
+                    String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                    //show popup for runtime permission
+                    requestPermissions(permissions, PERMISSION_CODE);
+                } else {
+                    //permission already granted
+                    pickImageFromGallery();
+                }
+            }
+        });
+
+        builder.setView(customLayout);
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (description.getText() != null && (int) mImageView.getTag() == 1) {
+                    recInserted = true;
+                    db.openReadable();
+                    recInserted = db.addRow(Objects.requireNonNull(description.getText()).toString(), imageViewToByte(mImageView));
+                }
+
+                if (recInserted) {
+                    Toast.makeText(getActivity(), "Success add row", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(getActivity(), "Not Success add row", Toast.LENGTH_SHORT).show();
+                }
+
+                setUpAdapter();
+
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
+
+
 
     private static byte[] imageViewToByte(ImageView image) {
         Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
@@ -192,11 +201,7 @@ public class DreamFragment extends Fragment  {
         }
     }
 
-    private void setUpAdapter(){
-        list = db.getDream();
-        arrayAdpt = new ImageAdapter(getContext(),list);
-        gridview.setAdapter(arrayAdpt);
-    }
+
 
 }
 

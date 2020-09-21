@@ -34,7 +34,7 @@ public class WantDatabase {
 
 
 
-    protected ArrayList<want> getWantItem(){
+    ArrayList<want> getWantItem(){
         ArrayList<want> item = new ArrayList<>();
         db= helper.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM NewTask", null);
@@ -44,6 +44,7 @@ public class WantDatabase {
 
             item.add(new want( task, checked));
         }
+        cursor.close();
         return item;
     }
 

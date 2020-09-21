@@ -42,7 +42,7 @@ public class DreamDatabase {
 
 
 
-    protected ArrayList<Dreamboard> getDream(){
+     ArrayList<Dreamboard> getDream(){
         ArrayList<Dreamboard> list = new ArrayList<Dreamboard>();
         db= helper.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM Dreamboard", null);
@@ -52,6 +52,7 @@ public class DreamDatabase {
 
             list.add(new Dreamboard( price, image));
         }
+        cursor.close();
         return list;
     }
 
@@ -72,7 +73,7 @@ public class DreamDatabase {
     }
 
 
-    public  void deleteData(String name) {
+    void deleteData(String name) {
         db = helper.getReadableDatabase();
 
         String sql = "DELETE FROM Dreamboard WHERE description = ?";
@@ -89,7 +90,7 @@ public class DreamDatabase {
 
 
 
-    public boolean addRow(String d, byte[] image) {
+    boolean addRow(String d, byte[] image) {
         synchronized(this.db) {
 
             ContentValues newDream = new ContentValues();
@@ -114,7 +115,7 @@ public class DreamDatabase {
         db.delete(DB_TABLE, null, null);
     }
 
-    public void close() {
+    void close() {
         helper.close();
     }
 

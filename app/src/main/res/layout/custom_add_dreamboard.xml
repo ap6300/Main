@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.dream.fragment">
+    tools:context=".ui.dream.DreamFragment">
 
     <ImageView
         android:id="@+id/image"
@@ -43,6 +43,7 @@
             android:layout_marginStart="5dp"
             android:ems="9"
             android:inputType="textPersonName"
-            />
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
     </LinearLayout>
 </LinearLayout>
