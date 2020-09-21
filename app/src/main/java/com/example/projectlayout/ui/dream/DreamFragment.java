@@ -1,5 +1,7 @@
 package com.example.projectlayout.ui.dream;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 
 public class DreamFragment extends Fragment  {
 
+    ArrayList<Dreamboard> list = new ArrayList<>();
     public static DreamFragment newInstance() {
         return new DreamFragment();
     }
@@ -43,7 +46,7 @@ public class DreamFragment extends Fragment  {
         DreamDatabase db = new DreamDatabase(getActivity());
         db.openReadable();
 
-        ArrayList<Dreamboard> list = new ArrayList<>();
+
         Cursor cursor = db.getData("SELECT * FROM Dreamboard");
         list.clear();
         while (cursor.moveToNext()) {
@@ -92,9 +95,19 @@ public class DreamFragment extends Fragment  {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.add_toolbar) {
-            NavHostFragment.findNavController(DreamFragment.this)
-                    .navigate(R.id.action_nav_dream_to_fragment_addDream);
-            return true;
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Desire");
+            final View customLayout = getLayoutInflater().inflate(R.layout.custom_add, null);
+            builder.setView(customLayout);
+            builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
         return super.onOptionsItemSelected(item);
     }
