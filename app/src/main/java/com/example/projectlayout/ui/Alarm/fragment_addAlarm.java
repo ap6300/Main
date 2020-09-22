@@ -1,6 +1,8 @@
 package com.example.projectlayout.ui.Alarm;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -90,6 +92,41 @@ public class fragment_addAlarm extends Fragment {
                 pickImageFromGallery();
             }
         });
+
+        repeat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Repeat");
+                    String[] week = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+                    builder.setMultiChoiceItems(week, null, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            repeat.setChecked(false);
+                         }
+                    });
+                     builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                         @Override
+                         public void onClick(DialogInterface dialog, int which) {
+
+                         }
+                     });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+
+
+                }
+
+        });
+
 
         add.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")

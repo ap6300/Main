@@ -34,4 +34,8 @@
     <string name="tab_item_dont_want">Don\'t Want</string>
     <string name="tab_item_want">Want</string>
 
+    <string name="activity_login"><a href="https://www.google.com">Click here to register an account</a></string>
+    <string name="email">email</string>
+    <string name="password">password</string>
+
 </resources>

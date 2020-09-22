@@ -12,10 +12,10 @@ import java.util.ArrayList;
 
 public class WantDatabase {
 
-    private static final String DB_NAME = "NewTask";
-    private static final String DB_TABLE = "NewTask";
+    private static final String DB_NAME = "Want";
+    private static final String DB_TABLE = "Want";
     private static final int DB_VERSION = 1;
-    private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE + " (item VARCHAR, checked INTERGER)";
+    private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE + " (item VARCHAR, listOrder INTERGER)";
     private WantDatabase.SQLHelper helper;
     private SQLiteDatabase db;
     private Context context;
@@ -34,10 +34,11 @@ public class WantDatabase {
 
 
 
+
     ArrayList<want> getWantItem(){
         ArrayList<want> item = new ArrayList<>();
         db= helper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM NewTask", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM Want ORDER BY listOrder", null);
         while (cursor.moveToNext()) {
             String task = cursor.getString(0);
             int checked = cursor.getInt(1);
@@ -58,7 +59,7 @@ public class WantDatabase {
 
             ContentValues newFriend = new ContentValues();
             newFriend.put("item", f);
-            newFriend.put("checked", c);
+            newFriend.put("listOrder", c);
 
             try {
                 db.insert(DB_TABLE,null,newFriend);
@@ -71,6 +72,30 @@ public class WantDatabase {
         }
     }
 
+    String getListOrder(int position){
+
+        db= helper.getReadableDatabase();
+        String sql = "SELECT * FROM Want where listOrder = \""+position+"\";";
+        Cursor cursor = db.rawQuery(sql, null);
+        cursor.moveToNext();
+        String task = cursor.getString(0);
+        cursor.close();
+        return task;
+    }
+
+    void updateListOrder(String item, int newPosition){
+
+        db = helper.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("UPDATE Want SET listOrder = "+newPosition+ " WHERE item = \""+item+"\"", null);
+        cursor.moveToNext();
+        cursor.close();
+
+        db.close();
+
+    }
+
+
     public void clear()
     {
         db = helper.getWritableDatabase();
@@ -81,7 +106,7 @@ public class WantDatabase {
     public void clearRecords(String name)
     {
         db = helper.getWritableDatabase();
-        String sql = "DELETE FROM Task WHERE item = ?";
+        String sql = "DELETE FROM Want WHERE item = ?";
         SQLiteStatement statement = db.compileStatement(sql);
         statement.clearBindings();
         statement.bindString(1, name);
@@ -89,30 +114,7 @@ public class WantDatabase {
         statement.execute();
     }
 
-    void updateIsChecked(String name) {
-        db = helper.getReadableDatabase();
-        ContentValues newAlarm = new ContentValues();
-        newAlarm.put("item",name);
-        newAlarm.put("checked",1);
 
-        db.update(DB_TABLE, newAlarm,  "item  = '" + name + "'",null);
-
-
-        db.close();
-
-    }
-
-    void updateIsNotChecked(String name) {
-        db = helper.getReadableDatabase();
-
-        ContentValues newAlarm = new ContentValues();
-        newAlarm.put("item",name);
-        newAlarm.put("checked",0);
-
-        db.update(DB_TABLE, newAlarm,  "item  = '" + name + "'",null);
-        db.close();
-
-    }
 
 
     public class SQLHelper extends SQLiteOpenHelper {

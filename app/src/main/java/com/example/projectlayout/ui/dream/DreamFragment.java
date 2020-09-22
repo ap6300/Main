@@ -51,6 +51,14 @@ public class DreamFragment extends Fragment  {
         return new DreamFragment();
     }
 
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //Fetch data from database and set to gridview
+        db = new DreamDatabase(getActivity());
+        db.openReadable();
+
+    }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -61,10 +69,8 @@ public class DreamFragment extends Fragment  {
         //ListView
         gridview = root.findViewById(R.id.gridview);
 
-        //Fetch data from database and set to gridview
-        db = new DreamDatabase(getActivity());
-        db.openReadable();
         setUpAdapter();
+
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            @Override
@@ -177,10 +183,10 @@ public class DreamFragment extends Fragment  {
 
     //handle result of runtime permission
     @Override
+
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_CODE) {
-            if (grantResults.length > 0 && grantResults[0] ==
-                    PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //permission was granted
                 pickImageFromGallery();
             } else {

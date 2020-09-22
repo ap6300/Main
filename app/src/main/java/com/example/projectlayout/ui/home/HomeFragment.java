@@ -22,19 +22,18 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 
 public class HomeFragment extends Fragment{
 
-    private HomeViewModel homeViewModel;
+    private TextView textView;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
+        HomeViewModel homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
 
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
 
-        final YouTubePlayerView youTubePlayerView = root.findViewById(R.id.videoView2);
+        YouTubePlayerView youTubePlayerView = root.findViewById(R.id.videoView2);
         getLifecycle().addObserver(youTubePlayerView);
 
         youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
@@ -46,7 +45,7 @@ public class HomeFragment extends Fragment{
             }
         });
 
-        final TextView textView = root.findViewById(R.id.text_home);
+        textView = root.findViewById(R.id.text_home);
         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {

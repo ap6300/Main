@@ -13,9 +13,9 @@ import java.util.ArrayList;
 public class DontWantDatabase {
 
     private static final String DB_NAME = "ListInformation";
-    private static final String DB_TABLE = "Task";
+    private static final String DB_TABLE = "DontWant";
     private static final int DB_VERSION = 1;
-    private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE + " (item VARCHAR, checked INTERGER)";
+    private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE + " (item VARCHAR, listOrder INTERGER)";
     private SQLHelper helper;
     private SQLiteDatabase db;
     private Context context;
@@ -37,7 +37,7 @@ public class DontWantDatabase {
     ArrayList<want> getDontWantItem(){
         ArrayList<want> item = new ArrayList<>();
         db= helper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM Task", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM DontWant ORDER BY listOrder", null);
         while (cursor.moveToNext()) {
             String task = cursor.getString(0);
             int checked = cursor.getInt(1);
@@ -47,6 +47,46 @@ public class DontWantDatabase {
         cursor.close();
         return item;
     }
+    Cursor getData(String sql) {
+        db = helper.getReadableDatabase();
+        return db.rawQuery(sql, null);
+    }
+
+    String getListOrder(int position){
+
+        db= helper.getReadableDatabase();
+        String sql = "SELECT * FROM DontWant where listOrder = \""+position+"\";";
+        Cursor cursor = db.rawQuery(sql, null);
+        cursor.moveToNext();
+        String task = cursor.getString(0);
+        cursor.close();
+        return task;
+    }
+
+    void updateListOrder(String item, int newPosition){
+
+        db = helper.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("UPDATE DontWant SET listOrder = "+newPosition+ " WHERE item = \""+item+"\"", null);
+        cursor.moveToNext();
+        cursor.close();
+
+        db.close();
+
+    }
+
+    void update(String item,String newitem){
+
+        db = helper.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("UPDATE DontWant SET  item = \""+newitem +"\" WHERE item = \""+item+"\"", null);
+        cursor.moveToNext();
+        cursor.close();
+
+        db.close();
+
+    }
+
 
 
 
@@ -60,7 +100,7 @@ public class DontWantDatabase {
 
             ContentValues newFriend = new ContentValues();
             newFriend.put("item", f);
-            newFriend.put("checked", c);
+            newFriend.put("listOrder", c);
 
             try {
                 db.insert(DB_TABLE,null,newFriend);
@@ -83,7 +123,7 @@ public class DontWantDatabase {
     public void clearRecords(String name)
     {
         db = helper.getWritableDatabase();
-        String sql = "DELETE FROM Task WHERE item = ?";
+        String sql = "DELETE FROM DontWant WHERE item = ?";
         SQLiteStatement statement = db.compileStatement(sql);
         statement.clearBindings();
         statement.bindString(1, name);
@@ -91,30 +131,6 @@ public class DontWantDatabase {
         statement.execute();
     }
 
-    void updateIsChecked(String name) {
-        db = helper.getReadableDatabase();
-        ContentValues newAlarm = new ContentValues();
-        newAlarm.put("item",name);
-        newAlarm.put("checked",1);
-
-        db.update(DB_TABLE, newAlarm,  "item  = '" + name + "'",null);
-
-
-        db.close();
-
-    }
-
-    void updateIsNotChecked(String name) {
-        db = helper.getReadableDatabase();
-
-        ContentValues newAlarm = new ContentValues();
-        newAlarm.put("item",name);
-        newAlarm.put("checked",0);
-
-        db.update(DB_TABLE, newAlarm,  "item  = '" + name + "'",null);
-        db.close();
-
-    }
 
 
     public class SQLHelper extends SQLiteOpenHelper {

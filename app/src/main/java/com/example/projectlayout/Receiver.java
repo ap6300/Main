@@ -4,6 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import static com.example.projectlayout.ui.Alarm.Alarm.DESCRIPTION;
+import static com.example.projectlayout.ui.Alarm.Alarm.ID;
+
 public class Receiver extends BroadcastReceiver {
 
     @Override
@@ -19,6 +22,9 @@ public class Receiver extends BroadcastReceiver {
         intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         */
         Intent alarmService = new Intent(context,AlarmService.class);
+        alarmService.putExtra(DESCRIPTION, intent.getStringExtra(DESCRIPTION));
+        alarmService.putExtra(ID,intent.getIntExtra(ID,123));
+        //alarmService.putExtra(IMAGE,intent.getByteArrayExtra(IMAGE));
         context.startService(alarmService);
 
         //context.startActivity(intent1);

@@ -22,6 +22,7 @@ public class Alarm {
     public static final String SUNDAY = "SUNDAY";
     public static final String RECURRING = "RECURRING";
     public static final String DESCRIPTION = "DESCRIPTION";
+    public static final String IMAGE = "IMAGE";
     public static final String ID = "ID";
 
 
@@ -177,16 +178,10 @@ public class Alarm {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(context, Receiver.class);
-        intent.putExtra(RECURRING, recurring);
-        intent.putExtra(MONDAY, mon);
-        intent.putExtra(TUESDAY, tue);
-        intent.putExtra(WEDNESDAY, wed);
-        intent.putExtra(THURSDAY, thur);
-        intent.putExtra(FRIDAY, fri);
-        intent.putExtra(SATURDAY, sat);
-        intent.putExtra(SUNDAY, sun);
+
         intent.putExtra(DESCRIPTION,description);
         intent.putExtra(ID,id);
+        //intent.putExtra(IMAGE,image);
 
 
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);

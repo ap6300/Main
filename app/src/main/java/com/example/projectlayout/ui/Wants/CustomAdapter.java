@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -44,7 +43,7 @@ public class CustomAdapter extends ArrayAdapter {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.rowlayout, parent, false);
             viewHolder.txtName = convertView.findViewById(R.id.label);
-            viewHolder.checkBox = convertView.findViewById(R.id.checkBox);
+
             result=convertView;
             convertView.setTag(viewHolder);
         } else {
@@ -54,29 +53,13 @@ public class CustomAdapter extends ArrayAdapter {
         final want item = dataSet.get(position);
         viewHolder.txtName.setText(item.name);
 
-        if(item.checked == 1){
-            viewHolder.checkBox.setChecked(true);
-        } else {
 
-            viewHolder.checkBox.setChecked(false);
-        }
 
         final DontWantDatabase mydatabase = new DontWantDatabase(getContext());
 
         mydatabase.openReadable();
 
-        viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
-                {
-                    mydatabase.updateIsChecked(item.name);
-                }
-                 else
-                {
-                    mydatabase.updateIsNotChecked(item.name);
-            }
-        }});
+
 
 
         return result;

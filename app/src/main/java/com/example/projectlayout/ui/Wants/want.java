@@ -2,9 +2,9 @@ package com.example.projectlayout.ui.Wants;
 
 public class want {
     public String name;
-    int checked;
+    public int listOrder;
     want(String name, int checked) {
         this.name = name;
-        this.checked = checked;
+        this.listOrder = checked;
     }
 }

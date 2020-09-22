@@ -15,6 +15,7 @@ import androidx.core.app.NotificationManagerCompat;
 import com.example.projectlayout.ui.Alarm.testActivity;
 
 import static com.example.projectlayout.ui.Alarm.Alarm.DESCRIPTION;
+import static com.example.projectlayout.ui.Alarm.Alarm.ID;
 import static com.example.projectlayout.ui.Alarm.testActivity.CHANNEL_ID;
 
 public class AlarmService extends Service {
@@ -41,12 +42,15 @@ public class AlarmService extends Service {
         PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        String alarmTitle = fullScreenIntent.getStringExtra(DESCRIPTION);
+        String alarmTitle = intent.getStringExtra(DESCRIPTION);
 
         Toast.makeText(getApplicationContext(), alarmTitle, Toast.LENGTH_SHORT).show();
 
 
-        int notificationId = 0;//Integer.parseInt(intent.getStringExtra(ID));
+        int notificationId = intent.getIntExtra(ID,123);
+
+        //byte[] recordImage = intent.getByteArrayExtra(IMAGE);
+        //Bitmap bitmap = BitmapFactory.decodeByteArray(recordImage, 0, recordImage.length);
 
 
 
@@ -55,6 +59,10 @@ public class AlarmService extends Service {
                 .setSmallIcon(R.drawable.ic_menu_camera)
                 .setContentTitle(alarmTitle)
                 .setContentText(String.valueOf(notificationId))
+                //.setLargeIcon(bitmap)
+                //.setStyle(new NotificationCompat.BigPictureStyle()
+                //    .bigPicture(bitmap)
+                //    .bigLargeIcon(null))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(fullScreenPendingIntent)
                 .setAutoCancel(true);
