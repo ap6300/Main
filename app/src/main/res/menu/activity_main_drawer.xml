@@ -7,7 +7,7 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_black_24dp"
-            android:title="@string/nav_header_title" />
+            android:title="@string/home_menu" />
         <item
             android:id="@+id/nav_alarm"
             android:icon="@drawable/ic_access_alarm_black_24dp"
@@ -20,6 +20,11 @@
             android:id="@+id/nav_dream"
             android:icon="@drawable/ic_menu_dream_24dp"
             android:title="@string/menu_dream" />
+
+        <item
+            android:id="@+id/bookFragment"
+            android:icon="@drawable/ic_book_black_24dp"
+            android:title="@string/menu_book" />
 
     </group>
 </menu>

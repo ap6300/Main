@@ -24,11 +24,6 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_intro">introActivity</string>
 
-    <string name="activity_login"><a href="https://www.google.com">Click here to register an account</a></string>
-
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="email">email</string>
-    <string name="password">password</string>
 </resources>

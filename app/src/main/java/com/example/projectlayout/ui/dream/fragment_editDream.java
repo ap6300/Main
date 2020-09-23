@@ -3,7 +3,9 @@ package com.example.projectlayout.ui.dream;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,21 +20,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.projectlayout.R;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
-import static android.app.Activity.RESULT_OK;
-
-
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link fragment_addDream#newInstance} factory method to
+ * Use the {@link fragment_editDream#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class fragment_addDream extends Fragment {
+public class fragment_editDream extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -41,18 +42,10 @@ public class fragment_addDream extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
 
-    ImageView mImageView;
-    private boolean recInserted;
-    private DreamDatabase mydManager;
-    private EditText description;
-    ArrayList<Dreamboard> list;
-
-    public fragment_addDream() {
+    public fragment_editDream() {
         // Required empty public constructor
     }
 
@@ -62,11 +55,11 @@ public class fragment_addDream extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment fragment_addDream.
+     * @return A new instance of fragment fragment_editDream.
      */
     // TODO: Rename and change types and number of parameters
-    public static fragment_addDream newInstance(String param1, String param2) {
-        fragment_addDream fragment = new fragment_addDream();
+    public static fragment_editDream newInstance(String param1, String param2) {
+        fragment_editDream fragment = new fragment_editDream();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -77,29 +70,51 @@ public class fragment_addDream extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
+    private DreamDatabase db;
+    private ArrayList<Dreamboard> list;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_add_dream, container, false);
+        final View root = inflater.inflate(R.layout.fragment_edit_dream, container, false);
+
+        db = new DreamDatabase(getActivity());
+        db.openReadable();
 
 
 
-        description = (EditText) root.findViewById(R.id.description);
+        final EditText editText = root.findViewById(R.id.editText_editDream);
+        final ImageView imageView = root.findViewById(R.id.imageView_editDream);
+        final String[] hold = {""};
+        getParentFragmentManager().setFragmentResultListener("key", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                String result = bundle.getString("key");
+                Cursor cursor = db.getData("SELECT * FROM Dreamboard where description = \""+result+"\";");
+                String price= "";
+                byte[] image = null;
+                while (cursor.moveToNext()) {
+                    price = cursor.getString(0);
+                    image = cursor.getBlob(1);
+                }
+                hold[0] = price;
+                Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+                editText.setText(price);
+                imageView.setImageBitmap(bitmap);
+            }
+        });
 
-        //imageview
-        mImageView = root.findViewById(R.id.image);
-        mImageView.setOnClickListener(new View.OnClickListener() {
+
+
+
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -119,42 +134,48 @@ public class fragment_addDream extends Fragment {
             }
         });
 
-        Button add = (Button) root.findViewById(R.id.add);
-        add.setOnClickListener(new View.OnClickListener() {
+
+        Button update = (Button) root.findViewById(R.id.update_button);
+
+        update.setOnClickListener(new View.OnClickListener(){
+
             @Override
             public void onClick(View v) {
+                db.updateData(editText.getText().toString(),imageViewToByte(imageView), hold[0]);
+                Toast.makeText(getActivity(), "Success update row", Toast.LENGTH_SHORT).show();
+                NavHostFragment.findNavController(fragment_editDream.this)
+                        .navigate(R.id.action_fragment_editDream_to_nav_dream);
+            }
+        });
 
-                if (description.getText() != null && (int) mImageView.getTag() == 1)
-                    recInserted=true;
-                    //recInserted = mydManager.addRow(description.getText().toString(), imageViewToByte(mImageView));
+        Button delete = (Button) root.findViewById(R.id.delete_button);
 
+        delete.setOnClickListener(new View.OnClickListener(){
 
-                if (recInserted) {
-                    Toast.makeText(getActivity(), "Success add row", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), "Not Success add row", Toast.LENGTH_SHORT).show();
-                }
-
-                //mydManager.close();
-
+            @Override
+            public void onClick(View v) {
+                db.deleteData(hold[0]);
+                Toast.makeText(getActivity(), "Success delete row", Toast.LENGTH_SHORT).show();
+                NavHostFragment.findNavController(fragment_editDream.this)
+                        .navigate(R.id.action_fragment_editDream_to_nav_dream);
             }
         });
 
 
+
+
+
+
+
         return root;
     }
-
-
     private static byte[] imageViewToByte(ImageView image) {
         Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-        return byteArray;
+        return stream.toByteArray();
     }
 
-
-    //Pick an image from the gallery
     private void pickImageFromGallery() {
         //intent to pick image
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -179,14 +200,4 @@ public class fragment_addDream extends Fragment {
         }
     }
 
-    //handle result of picked image
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
-            //set image to image view
-            mImageView.setImageURI(data.getData());
-            mImageView.setTag(1);
-
-        }
-    }
 }
