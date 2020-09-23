@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="InnerclassSeparator">
-        <activity android:name=".ui.Alarm.testActivity"></activity>
+        <activity android:name=".ui.Alarm.testActivity" />
+        <activity android:name=".LoginActivity"/>
 
         <service
             android:name=".AlarmService"
