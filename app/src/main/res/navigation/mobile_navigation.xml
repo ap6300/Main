@@ -76,6 +76,11 @@
         android:name="com.example.projectlayout.ui.home.BookFragment"
         android:label="Book"
         tools:layout="@layout/fragment_book" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.example.projectlayout.LoginActivity"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
 
 
 </navigation>

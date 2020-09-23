@@ -22,9 +22,14 @@
             android:title="@string/menu_dream" />
 
         <item
-            android:id="@+id/bookFragment"
+        android:id="@+id/bookFragment"
+        android:icon="@drawable/ic_book_black_24dp"
+        android:title="@string/menu_book" />
+
+        <item
+            android:id="@+id/loginActivity"
             android:icon="@drawable/ic_book_black_24dp"
-            android:title="@string/menu_book" />
+            android:title="login" />
 
 
 
