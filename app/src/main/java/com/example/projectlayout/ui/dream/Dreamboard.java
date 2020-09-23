@@ -8,6 +8,7 @@ public class Dreamboard {
 
 
 
+
     public Dreamboard(String name, byte[] image){
         this.name = name;
         this.image = image;
