@@ -1,10 +1,12 @@
 package com.example.projectlayout;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email;
     private EditText password;
     private Button login;
+    private TextView register;
     private RequestQueue requestQueue;
     private static String URL = "http://10.0.2.2:8080/myWant/login.php";
     private StringRequest request;
@@ -41,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         email = (EditText) findViewById(R.id.etEmail);
         password = (EditText) findViewById(R.id.etPassword);
         login = (Button) findViewById(R.id.btnLogin);
+        register = (TextView) findViewById(R.id.register);
 
         requestQueue = Volley.newRequestQueue(this);
 
@@ -61,6 +65,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        register.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                openlink("http://10.0.2.2:8080/myWant/Registration.html");
+            }
+        });
     }
 
     //private void Login(final String email, final String password) {
@@ -78,8 +88,10 @@ public class LoginActivity extends AppCompatActivity {
 
                             if (success.equals("1")){
 
+                                //Do stuff here after successful login
+
                                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
                                 for (int i = 0; i < jsonArray.length(); i++){
                                     JSONObject object = jsonArray.getJSONObject(i);
                                     //String name = object.getString("name").trim();
@@ -127,5 +139,12 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
+
+    public void openlink(String url){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
+    }
+
 
 }

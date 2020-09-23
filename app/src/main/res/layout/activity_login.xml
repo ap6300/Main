@@ -45,10 +45,15 @@
         android:drawableRight="@drawable/ic_baseline_lock_24"
         />
 
-    <Button android:id="@+id/btnLogin"
-        android:layout_width="150dp" android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" android:text="SIGN IN"
-        />
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#0091EA"
+        android:text="SIGN IN" />
+
+
 
     <TextView
         android:id="@+id/register"
