@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Prac2 Task 2 Form</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+	<script>
+		function checkPassword(form) { 
+                password1 = form.password.value; 
+                password2 = form.password2.value; 
+				
+  
+                // If password not entered 
+                if (password1 == '') 
+                    alert ("Please enter Password"); 
+                      
+                // If confirm password not entered 
+                else if (password2 == '') 
+                    alert ("Please enter confirm password"); 
+                      
+                // If Not same return False.     
+                else if (password1 != password2) { 
+                    alert ("\nPassword did not match: Please try again...") 
+                    return false; 
+                } 
+  
+                // If same return True. 
+                else{ 
+                    return true; 
+				} 
+            } 
+	</script>
+	
+  </head>
+  <body>
+  <form id="register" onSubmit = "return checkPassword(this)"action="registration.php" method="post">
+
+
+  <section>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-8 col-xl-6">
+          <div class="row">
+            <div class="col text-center">
+              <h1>MyWant Registration Example</h1>
+             
+            </div>
+          </div>
+          <div class="row align-items-center">
+            <div class="col mt-4">
+              <input type="text" class="form-control" placeholder="First Name" id="firstName" name="firstName"required >
+            </div>
+			<div class="col mt-4">
+              <input type="text" class="form-control" placeholder="Last Name" id="lastName" name="lastName" required >
+            </div>
+			
+          </div>
+          <div class="row align-items-center mt-4">
+            <div class="col">
+              <input type="email" class="form-control" placeholder="Email" id="email" name="email" required>
+            </div>
+          </div>
+          <div class="row align-items-center mt-4">
+            <div class="col">
+              <input type="password" class="form-control" placeholder="Password" id="password" name="password"  required>
+            </div>
+            <div class="col">
+              <input type="password" class="form-control" placeholder="Confirm Password" id="password2" name="password2" required>
+            </div>
+          </div>
+          <div class="row justify-content-start mt-4">
+            <div class="col">
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input type="checkbox" class="form-check-input" name="checkbox" id="checkbox" required>
+                  I Read and Accept <a href="https://www.google.com">Terms and Conditions</a>
+                </label>
+              </div>
+
+              <button type="submit" value="submit" name="submit" class="btn btn-primary mt-4">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  
+  
+  </form>
+  
+  </body>
+  </html>
