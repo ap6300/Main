@@ -2,10 +2,6 @@ package com.example.projectlayout;
 
 import android.content.Intent;
 import android.os.Bundle;
-<<<<<<< HEAD
-import android.util.Log;
-=======
->>>>>>> remotes/github/Alex
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -82,11 +78,8 @@ public class LoginActivity extends AppCompatActivity {
 
                             if (success.equals("1")){
 
-<<<<<<< HEAD
                                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
-=======
                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
->>>>>>> remotes/github/Alex
                                 for (int i = 0; i < jsonArray.length(); i++){
                                     JSONObject object = jsonArray.getJSONObject(i);
                                     //String name = object.getString("name").trim();
