@@ -32,6 +32,10 @@ public class WantDatabase {
         return this;
     }
 
+    Cursor getData(String sql) {
+        db = helper.getReadableDatabase();
+        return db.rawQuery(sql, null);
+    }
 
 
 
@@ -88,6 +92,18 @@ public class WantDatabase {
         db = helper.getReadableDatabase();
 
         Cursor cursor = db.rawQuery("UPDATE Want SET listOrder = "+newPosition+ " WHERE item = \""+item+"\"", null);
+        cursor.moveToNext();
+        cursor.close();
+
+        db.close();
+
+    }
+
+    void update(String item,String newitem){
+
+        db = helper.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("UPDATE Want SET  item = \""+newitem +"\" WHERE item = \""+item+"\"", null);
         cursor.moveToNext();
         cursor.close();
 

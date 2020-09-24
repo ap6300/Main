@@ -5,7 +5,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,7 +27,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.projectlayout.R;
 
@@ -37,14 +38,12 @@ import static android.app.Activity.RESULT_OK;
 
 public class DreamFragment extends Fragment  {
 
-    private ArrayList<Dreamboard> list = new ArrayList<>();
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
     private ImageView mImageView;
     private EditText description;
     private boolean recInserted;
     private DreamDatabase db;
-    private ImageAdapter arrayAdpt;
     private GridView gridview;
 
     public static DreamFragment newInstance() {
@@ -71,20 +70,11 @@ public class DreamFragment extends Fragment  {
 
         setUpAdapter();
 
-
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            @Override
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-               Bundle result = new Bundle();
                TextView hi = view.findViewById(R.id.textView_listView);
-
-               result.putString("key", (String) hi.getText());
-               getParentFragmentManager().setFragmentResult("key", result);
-
-
-               NavHostFragment.findNavController(DreamFragment.this).navigate(R.id.action_nav_dream_to_fragment_editDream);
-
+               showEdit(getView(),hi.getText().toString());
            }
         });
 
@@ -109,8 +99,8 @@ public class DreamFragment extends Fragment  {
     }
 
     private void setUpAdapter(){
-        list = db.getDream();
-        arrayAdpt = new ImageAdapter(getContext(),list);
+        ArrayList<Dreamboard> list = db.getDream();
+        ImageAdapter arrayAdpt = new ImageAdapter(getContext(), list);
         gridview.setAdapter(arrayAdpt);
         db.close();
     }
@@ -145,14 +135,6 @@ public class DreamFragment extends Fragment  {
                     db.openReadable();
                     recInserted = db.addRow(Objects.requireNonNull(description.getText()).toString(), imageViewToByte(mImageView));
                 }
-
-                if (recInserted) {
-                    Toast.makeText(getActivity(), "Success add row", Toast.LENGTH_SHORT).show();
-
-                } else {
-                    Toast.makeText(getActivity(), "Not Success add row", Toast.LENGTH_SHORT).show();
-                }
-
                 setUpAdapter();
 
             }
@@ -160,6 +142,65 @@ public class DreamFragment extends Fragment  {
         AlertDialog dialog = builder.create();
         dialog.show();
 
+    }
+
+    private void showEdit(View view,String selected) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Edit Dreamboard");
+        final View customLayout = getLayoutInflater().inflate(R.layout.custom_add_dreamboard, null);
+        mImageView = customLayout.findViewById(R.id.image);
+        description = customLayout.findViewById(R.id.description);
+
+        Cursor cursor = db.getData("SELECT * FROM Dreamboard where description = \""+selected+"\";");
+
+        cursor.moveToNext();
+        final String price = cursor.getString(0);
+        byte[] image = cursor.getBlob(1);
+
+        cursor.close();
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+        description.setText(price);
+        mImageView.setImageBitmap(bitmap);
+
+
+
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                    //permission not granted, request it.
+                    String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                    //show popup for runtime permission
+                    requestPermissions(permissions, PERMISSION_CODE);
+                } else {
+                    //permission already granted
+                    pickImageFromGallery();
+                }
+            }
+        });
+
+        builder.setView(customLayout);
+        builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                db.updateData(description.getText().toString(),imageViewToByte(mImageView), price);
+                setUpAdapter();
+
+            }
+        });
+
+
+
+        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                db.deleteData(price);
+                setUpAdapter();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 

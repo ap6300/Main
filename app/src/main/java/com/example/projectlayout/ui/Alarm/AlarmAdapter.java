@@ -1,12 +1,15 @@
 package com.example.projectlayout.ui.Alarm;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -19,13 +22,16 @@ public class AlarmAdapter extends BaseAdapter {
 
     private Context mContext;
     private ArrayList<Alarm> list;
-
-    public AlarmAdapter(Context c, ArrayList<Alarm> l) {
-        this.mContext = c;
-        this.list = l;
+    private alarmInterface alarmInterface;
+    public interface alarmInterface {
+        void onToggle(Alarm alarm);
     }
 
-
+    public AlarmAdapter(Context c, ArrayList<Alarm> l,alarmInterface alarmInterface) {
+        this.mContext = c;
+        this.list = l;
+        this.alarmInterface = alarmInterface;
+    }
 
     private static class ViewHolder{
         TextView alarmTime;
@@ -36,10 +42,6 @@ public class AlarmAdapter extends BaseAdapter {
         ImageView imageView;
     }
 
-
-
-
-
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View listItem = convertView;
@@ -48,7 +50,7 @@ public class AlarmAdapter extends BaseAdapter {
         if (listItem == null) {
             listItem = LayoutInflater.from(mContext).inflate(R.layout.custom_recyclerview_alarm, parent, false);
 
-            Alarm alarm = list.get(position);
+            final Alarm alarm = list.get(position);
 
             TextView alarmTime = listItem.findViewById(R.id.item_alarm_time);
             Switch alarmStarted = listItem.findViewById(R.id.item_alarm_started);
@@ -59,7 +61,7 @@ public class AlarmAdapter extends BaseAdapter {
 
             holder.alarmTime = alarmTime;
             holder.alarmStarted = alarmStarted;
-            holder.alarmRecurring= alarmRecurring;
+            holder.alarmRecurring = alarmRecurring;
             holder.alarmRecurringDays = alarmRecurringDays;
             holder.alarmTitle = alarmTitle;
             holder.imageView = imageView;
@@ -67,10 +69,12 @@ public class AlarmAdapter extends BaseAdapter {
             //set the custom view value
 
 
-            String alarmText = String.format("%02d:%02d", alarm.getHour(), alarm.getMin());
+            @SuppressLint("DefaultLocale") String alarmText = String.format("%02d:%02d", alarm.getHour(), alarm.getMin());
             holder.alarmTime.setText(alarmText);
 
-            holder.alarmStarted.setChecked(alarm.alarmOn);
+            if (alarm.isAlarmOn()) {
+                holder.alarmStarted.setChecked(true);
+            }
 
             if (alarm.isRecurring()) {
                 holder.alarmRecurring.setImageResource(R.drawable.ic_repeat_black_24dp);
@@ -82,9 +86,16 @@ public class AlarmAdapter extends BaseAdapter {
 
             holder.alarmTitle.setText(alarm.getDescription());
 
-            byte[] recordImage = alarm.getImage();
+            byte[] recordImage = Base64.decode(alarm.getImage(),Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(recordImage, 0, recordImage.length);
             holder.imageView.setImageBitmap(bitmap);
+
+            alarmStarted.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    alarmInterface.onToggle(alarm);
+                }
+            });
 
         }
 

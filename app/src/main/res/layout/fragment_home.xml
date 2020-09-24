@@ -15,7 +15,7 @@
         android:fontFamily="sans-serif"
         android:textAlignment="center"
         android:textColor="#2196F3"
-        android:textSize="25dp"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,27 +31,34 @@
         android:background="#FFFFFF"
         android:orientation="horizontal">
 
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFF"
+            android:orientation="horizontal">
         <ImageButton
             android:id="@+id/btn_book"
             style="@style/Widget.AppCompat.ImageButton"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
             android:layout_weight="1"
             android:scaleType="fitCenter"
             android:src="@drawable/book_cover"
             android:background="#000000"
-            tools:src="@drawable/book_cover" />
+            tools:src="@drawable/book_cover"
+            android:contentDescription="@string/description_bookCover" />
 
-        <ImageButton
-            android:id="@+id/btn_website"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:src="@drawable/money"
-            android:background="#ffffff"/>
+            <ImageButton
+                android:id="@+id/btn_website"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+
+                android:background="#ffffff"
+                android:scaleType="fitCenter"
+                android:src="@drawable/coin"
+                android:contentDescription="@string/description_coin" />
+
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

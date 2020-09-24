@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_nav_home_to_bookFragment"
             app:destination="@id/bookFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 
 
@@ -33,26 +36,13 @@
         android:id="@+id/nav_dream"
         android:name="com.example.projectlayout.ui.dream.DreamFragment"
         android:label="@string/menu_dream"
-        tools:layout="@layout/fragment_dream" >
-        <action
-            android:id="@+id/action_nav_dream_to_fragment_editDream"
-            app:destination="@id/fragment_editDream" />
-    </fragment>
+        tools:layout="@layout/fragment_dream" />
 
     <fragment
         android:id="@+id/nav_wants"
         android:name="com.example.projectlayout.ui.Wants.WantsFragment"
         android:label="@string/menu_wants"
         tools:layout="@layout/fragment_wants" />
-    <fragment
-        android:id="@+id/fragment_editDream"
-        android:name="com.example.projectlayout.ui.dream.fragment_editDream"
-        android:label="Edit Dream"
-        tools:layout="@layout/fragment_edit_dream" >
-        <action
-            android:id="@+id/action_fragment_editDream_to_nav_dream"
-            app:destination="@id/nav_dream" />
-    </fragment>
     <fragment
         android:id="@+id/fragment_addAlarm"
         android:name="com.example.projectlayout.ui.Alarm.fragment_addAlarm"
@@ -81,6 +71,14 @@
         android:name="com.example.projectlayout.LoginActivity"
         android:label="activity_login"
         tools:layout="@layout/activity_login" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.projectlayout.ui.login.LoginFragment"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
 
 
 </navigation>

@@ -8,12 +8,12 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_black_24dp"
             android:title="@string/home_menu" />
-
-
         <item
-            android:id="@+id/nav_alarm"
-            android:icon="@drawable/ic_access_alarm_black_24dp"
-            android:title="@string/menu_alarm" />
+            android:id="@+id/bookFragment"
+            android:icon="@drawable/ic_book_black_24dp"
+            android:title="@string/menu_book" />
+
+
         <item
             android:id="@+id/nav_wants"
             android:icon="@drawable/ic_format_list_numbered_black_24dp"
@@ -22,17 +22,17 @@
             android:id="@+id/nav_dream"
             android:icon="@drawable/ic_menu_dream_24dp"
             android:title="@string/menu_dream" />
+        <item
+            android:id="@+id/nav_alarm"
+            android:icon="@drawable/ic_access_alarm_black_24dp"
+            android:title="@string/menu_alarm" />
+
 
         <item
-        android:id="@+id/bookFragment"
-        android:icon="@drawable/ic_book_black_24dp"
-        android:title="@string/menu_book" />
-
-        <item
-            android:id="@+id/loginActivity"
+            android:id="@+id/loginFragment"
             android:icon="@drawable/ic_baseline_account_box_24"
-            android:title="login" />
-
-
+            android:title="@string/menu_login" />
     </group>
+
+
 </menu>

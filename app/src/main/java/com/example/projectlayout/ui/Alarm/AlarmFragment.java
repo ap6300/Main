@@ -1,7 +1,6 @@
 package com.example.projectlayout.ui.Alarm;
 
 import android.annotation.SuppressLint;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,49 +36,28 @@ public class AlarmFragment extends Fragment {
         list.clear();
 
 
-        AlarmDatabase db = new AlarmDatabase(getContext());
+        final AlarmDatabase db = new AlarmDatabase(getContext());
         db.openReadable();
 
-        byte[] image = null;
-
-        Cursor cursor = db.getData1("SELECT * FROM Alarm");
-
-        while (cursor.moveToNext()) {
-
-            int id = cursor.getInt(0);
-            int hour= cursor.getInt(1);
-            int min = cursor.getInt(2);;
-            String description = cursor.getString(3);;
-
-            boolean alarmOn = false;
-            if(cursor.getInt(4) == 1){ alarmOn = true; }
-
-            boolean recurring = false;
-            if(cursor.getInt(5) == 1){ recurring = true; }
-
-            boolean mon = false;
-            if(cursor.getInt(6) == 1){ mon = true; }
-            boolean tue = false;
-            if(cursor.getInt(7) == 1){ tue = true; }
-            boolean wed = false;
-            if(cursor.getInt(8) == 1){ wed = true; }
-            boolean thur = false;
-            if(cursor.getInt(9) == 1){ thur = true;}
-            boolean fri = false;
-            if(cursor.getInt(10) == 1){ fri = true; }
-            boolean sat = false;
-            if(cursor.getInt(11) == 1){ sat = true; }
-            boolean sun = false;
-            if(cursor.getInt(12) == 1){ sun = true; }
-
-            image = cursor.getBlob(13);
-
-            list.add(new Alarm(id,hour,min,description,alarmOn,recurring,mon,tue,wed,thur,fri,sat,sun,image));
 
 
-        }
+       list = db.getAlarm();
 
-        AlarmAdapter alarmAdapter = new AlarmAdapter(getContext(),list);
+        AlarmAdapter alarmAdapter = new AlarmAdapter(getContext(), list, new AlarmAdapter.alarmInterface() {
+            @Override
+            public void onToggle(Alarm alarm) {
+                if(alarm.isAlarmOn()){
+                    alarm.cancelAlarm(getContext());
+                    alarm.setAlarmOn(false);
+                    db.updateAlarm(0,alarm.getDescription());
+                }else{
+                    alarm.schedule(getContext());
+                    alarm.setAlarmOn(true);
+                    db.updateAlarm(1,alarm.getDescription());
+                }
+
+            }
+        });
         recyclerView.setAdapter(alarmAdapter);
 
         alarmAdapter.notifyDataSetChanged();
@@ -91,18 +69,12 @@ public class AlarmFragment extends Fragment {
 
                 Bundle result = new Bundle();
                 TextView hi = view.findViewById(R.id.item_alarm_title);
-
                 result.putString("key", (String) hi.getText());
                 getParentFragmentManager().setFragmentResult("key", result);
-
-
                 NavHostFragment.findNavController(AlarmFragment.this).navigate(R.id.action_nav_alarm_to_fragment_editAlarm);
 
             }
         });
-
-
-
         return root;
     }
 

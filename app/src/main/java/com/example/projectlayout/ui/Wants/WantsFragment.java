@@ -5,6 +5,9 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -18,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.projectlayout.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -30,22 +32,15 @@ public class WantsFragment extends Fragment {
     private DontWantDatabase dontWantdb;
     private WantDatabase wantdb;
     private RecyclerView productRec;
-    private WantCustomAdapter adt1;
-    private DontWantRecyclerViewAdapter adt;
     private ArrayList<want> item = new ArrayList<>();
     private ArrayList<want> item1 = new ArrayList<>();
     private TabLayout tab;
-
-
-
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_wants, container, false);
         setHasOptionsMenu(true);
-
-        FloatingActionButton fab = root.findViewById(R.id.floatingActionButton2);
 
         //init
         productRec = root.findViewById(R.id.prodrec);
@@ -59,22 +54,11 @@ public class WantsFragment extends Fragment {
         wantdb = new WantDatabase(getActivity());
         wantdb.openReadable();
 
-
-
         item.clear();
         item = dontWantdb.getDontWantItem();
 
-
         //set up the adapter
-        adt = new DontWantRecyclerViewAdapter(item, getContext(), new DontWantRecyclerViewAdapter.RecycleViewInterface() {
-            @Override
-            public void onItemClick(int position) {
-                showEdit(getView(),position);
-            }
-        });
-        productRec.setLayoutManager(new LinearLayoutManager(getContext()));
-        productRec.setAdapter(adt);
-        adt.notifyDataSetChanged();
+        setup(item);
 
         //drag and drop
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
@@ -82,36 +66,20 @@ public class WantsFragment extends Fragment {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(productRec);
 
-
-
         tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if(tab.getPosition()==1){
                     item1.clear();
                     item1 = wantdb.getWantItem();
-                    adt = new DontWantRecyclerViewAdapter(item1,getContext(), new DontWantRecyclerViewAdapter.RecycleViewInterface() {
-                        @Override
-                        public void onItemClick(int position) {
-
-                        }
-                    });
-                    productRec.setLayoutManager(new LinearLayoutManager(getContext()));
-                    productRec.setAdapter(adt);
-                    adt.notifyDataSetChanged();
+                    //set up the adapter
+                    setup(item1);
 
                 } else if(tab.getPosition()==0) {
                     item.clear();
                     item = dontWantdb.getDontWantItem();
-                    adt = new DontWantRecyclerViewAdapter(item,getContext(), new DontWantRecyclerViewAdapter.RecycleViewInterface() {
-                        @Override
-                        public void onItemClick(int position) {
-
-                        }
-                    });
-                    productRec.setLayoutManager(new LinearLayoutManager(getContext()));
-                    productRec.setAdapter(adt);
-                    adt.notifyDataSetChanged();
+                    //set up the adapter
+                    setup(item);
                 }
 
             }
@@ -125,45 +93,44 @@ public class WantsFragment extends Fragment {
                 if(tab.getPosition()==1){
                     item1.clear();
                     item1 = wantdb.getWantItem();
-                    adt = new DontWantRecyclerViewAdapter(item1,getContext(), new DontWantRecyclerViewAdapter.RecycleViewInterface() {
-                        @Override
-                        public void onItemClick(int position) {
-
-                        }
-                    });
-                    productRec.setLayoutManager(new LinearLayoutManager(getContext()));
-                    productRec.setAdapter(adt);
-                    adt.notifyDataSetChanged();
+                    //set up the adapter
+                    setup(item1);
 
                 } else if(tab.getPosition()==0) {
                     item.clear();
                     item = dontWantdb.getDontWantItem();
-                    adt = new DontWantRecyclerViewAdapter(item,getContext(), new DontWantRecyclerViewAdapter.RecycleViewInterface() {
-                        @Override
-                        public void onItemClick(int position) {
-
-                        }
-                    });
-                    productRec.setLayoutManager(new LinearLayoutManager(getContext()));
-                    productRec.setAdapter(adt);
-                    adt.notifyDataSetChanged();
+                    //set up the adapter
+                    setup(item);
                 }
 
             }
         });
 
-        fab.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                showAlertDialogButtonClicked(getView());
-            }
-        });
-
-
 
 
         return root;
+    }
+
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_addicon, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.add_toolbar) {
+            showAdd(getView());
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END, 0) {
@@ -175,18 +142,14 @@ public class WantsFragment extends Fragment {
 
             if(tab.getSelectedTabPosition()==1) {
                 String x = wantdb.getListOrder(fromPosition);
-
                 String y = wantdb.getListOrder(toPosition);
-
                 Collections.swap(item1, fromPosition, toPosition);
+
                 wantdb.updateListOrder(x, toPosition);
                 wantdb.updateListOrder(y, fromPosition);
             }else {
-
                 String x = dontWantdb.getListOrder(fromPosition);
-
                 String y = dontWantdb.getListOrder(toPosition);
-
                 Collections.swap(item, fromPosition, toPosition);
 
                 dontWantdb.updateListOrder(x, toPosition);
@@ -201,11 +164,35 @@ public class WantsFragment extends Fragment {
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
         }
+
+        @Override
+        public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+            super.clearView(recyclerView, viewHolder);
+            if(tab.getSelectedTabPosition()==1) {
+                item1 = wantdb.getWantItem();
+                setup(item1);
+            }else{
+                item = dontWantdb.getDontWantItem();
+                setup(item);
+            }
+        }
     };
 
+    private void setup(ArrayList<want> list){
+        DontWantRecyclerViewAdapter adt = new DontWantRecyclerViewAdapter(list, getContext(), new DontWantRecyclerViewAdapter.RecycleViewInterface() {
+            @Override
+            public void onItemClick(int position) {
+                showEdit(getView(), position);
+            }
+        });
+        productRec.setLayoutManager(new LinearLayoutManager(getContext()));
+        productRec.setAdapter(adt);
+        adt.notifyDataSetChanged();
+    }
 
 
-    private void showAlertDialogButtonClicked(View view) {
+
+    private void showAdd(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         if(tab.getSelectedTabPosition()==1) {
             builder.setTitle("Add Want");
@@ -225,17 +212,10 @@ public class WantsFragment extends Fragment {
                     boolean work = wantdb.addRow(editText.getText().toString(), x);
                     wantdb.close();
                     if (work) {
-                        sendDialogDataToActivity(editText.getText().toString());
-                        item1 = wantdb.getWantItem();
-                        adt = new DontWantRecyclerViewAdapter(item1,getContext(), new DontWantRecyclerViewAdapter.RecycleViewInterface() {
-                            @Override
-                            public void onItemClick(int position) {
 
-                            }
-                        });
-                        productRec.setAdapter(adt);
-                        productRec.setLayoutManager(new LinearLayoutManager(getContext()));
-                        adt.notifyDataSetChanged();
+                        item1 = wantdb.getWantItem();
+                        //set up the adapter
+                        setup(item1);
                     } else {
                         Toast.makeText(getActivity(), "Failure", Toast.LENGTH_SHORT).show();
                     }
@@ -245,17 +225,10 @@ public class WantsFragment extends Fragment {
                     boolean work = dontWantdb.addRow(editText.getText().toString(), x);
                     dontWantdb.close();
                     if (work) {
-                        sendDialogDataToActivity(editText.getText().toString());
-                        item = dontWantdb.getDontWantItem();
-                        adt = new DontWantRecyclerViewAdapter(item,getContext(), new DontWantRecyclerViewAdapter.RecycleViewInterface() {
-                            @Override
-                            public void onItemClick(int position) {
 
-                            }
-                        });
-                        productRec.setAdapter(adt);
-                        productRec.setLayoutManager(new LinearLayoutManager(getContext()));
-                        adt.notifyDataSetChanged();
+                        item = dontWantdb.getDontWantItem();
+                        //set up the adapter
+                        setup(item);
 
                     } else {
                         Toast.makeText(getActivity(), "Failure", Toast.LENGTH_SHORT).show();
@@ -265,77 +238,60 @@ public class WantsFragment extends Fragment {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
-
     }
-    private void sendDialogDataToActivity(String data) {
-        Toast.makeText(getActivity(), data, Toast.LENGTH_SHORT).show();
-
-    }
-
 
     private void showEdit(View view, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        if(tab.getSelectedTabPosition()==1) {
-            builder.setTitle("Edit Want");
-        }else{
-            builder.setTitle("Edit Don't Want");
-        }
         final View customLayout = getLayoutInflater().inflate(R.layout.custom_add_item_first, null);
-        builder.setView(customLayout);
         final EditText editText = customLayout.findViewById(R.id.editTextTextPersonName);
-
-        Cursor cursor = dontWantdb.getData("SELECT * FROM DontWant where listOrder = \""+position+"\";");
         String task= "";
 
-        cursor.moveToNext();
-        task = cursor.getString(0);
+        if(tab.getSelectedTabPosition()==1) {
+            builder.setTitle("Edit Want");
+            //fetch data from database
+            Cursor cursor = wantdb.getData("SELECT * FROM Want where listOrder = \""+position+"\";");
+            cursor.moveToNext();
+            cursor.close();
 
-        editText.setText(task);
+            //set text into edittext
+            task = cursor.getString(0);
 
+            editText.setText(task);
+        }else{
+            builder.setTitle("Edit Don't Want");
+            //fetch data from database
+            Cursor cursor = dontWantdb.getData("SELECT * FROM DontWant where listOrder = \""+position+"\";");
+            cursor.moveToNext();
+            task = cursor.getString(0);
+            cursor.close();
+
+            //set text into the edittext
+            editText.setText(task);
+        }
 
         final String finalTask = task;
+
+        builder.setView(customLayout);
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-
                 if(tab.getSelectedTabPosition()==1) {
                     wantdb.openReadable();
-                    int x = item1.size();
-                    boolean work = wantdb.addRow(editText.getText().toString(), x);
-                    wantdb.close();
-                    if (work) {
-                        sendDialogDataToActivity(editText.getText().toString());
-                        item1 = wantdb.getWantItem();
-                        adt = new DontWantRecyclerViewAdapter(item1,getContext(), new DontWantRecyclerViewAdapter.RecycleViewInterface() {
-                            @Override
-                            public void onItemClick(int position) {
+                    wantdb.update(finalTask,editText.getText().toString());
 
-                            }
-                        });
-                        productRec.setAdapter(adt);
-                        productRec.setLayoutManager(new LinearLayoutManager(getContext()));
-                        adt.notifyDataSetChanged();
-                    } else {
-                        Toast.makeText(getActivity(), "Failure", Toast.LENGTH_SHORT).show();
-                    }
+                    item1 = wantdb.getWantItem();
+                    //set up the adapter
+                    setup(item1);
+
+                    wantdb.close();
                 } else{
                     dontWantdb.openReadable();
-
                     dontWantdb.update(finalTask,editText.getText().toString());
 
-
-                        sendDialogDataToActivity(editText.getText().toString());
-                        item = dontWantdb.getDontWantItem();
-                        adt = new DontWantRecyclerViewAdapter(item,getContext(), new DontWantRecyclerViewAdapter.RecycleViewInterface() {
-                            @Override
-                            public void onItemClick(int position) {
-
-                            }
-                        });
-                        productRec.setAdapter(adt);
-                        productRec.setLayoutManager(new LinearLayoutManager(getContext()));
-                        adt.notifyDataSetChanged();
+                    item = dontWantdb.getDontWantItem();
+                    //set up the adapter
+                    setup(item);
 
                     dontWantdb.close();
                 }
@@ -344,20 +300,21 @@ public class WantsFragment extends Fragment {
         builder.setNegativeButton("delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        if(tab.getSelectedTabPosition()==1) {
+                            wantdb.clearRecords(finalTask);
+                            item1 = wantdb.getWantItem();
+                            //set up the adapter
+                            setup(item1);
 
-                        dontWantdb.clearRecords(editText.getText().toString());
-                        item = dontWantdb.getDontWantItem();
-                        adt = new DontWantRecyclerViewAdapter(item,getContext(), new DontWantRecyclerViewAdapter.RecycleViewInterface() {
-                            @Override
-                            public void onItemClick(int position) {
+                            wantdb.close();
+                        } else {
+                            dontWantdb.clearRecords(finalTask);
+                            item = dontWantdb.getDontWantItem();
+                            //set up the adapter
+                            setup(item);
 
-                            }
-                        });
-                        productRec.setAdapter(adt);
-                        productRec.setLayoutManager(new LinearLayoutManager(getContext()));
-                        adt.notifyDataSetChanged();
-
-
+                            dontWantdb.close();
+                        }
                     }
         });
         AlertDialog dialog = builder.create();

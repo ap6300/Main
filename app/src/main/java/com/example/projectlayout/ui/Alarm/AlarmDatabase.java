@@ -17,7 +17,7 @@ public class AlarmDatabase {
     private static final int DB_VERSION = 1;
     private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE + " " +
             "(id INTEGER PRIMARY KEY AUTOINCREMENT, hour INTEGER, min INTEGER, description VARCHAR, alarmOn INTEGER, recurring INTEGER," +
-            "mon INTEGER, tue INTEGER, wed INTEGER, thur INTEGER, fri INTEGER, sat INTEGER, sun INTEGER, image BLOB);";
+            "mon INTEGER, tue INTEGER, wed INTEGER, thur INTEGER, fri INTEGER, sat INTEGER, sun INTEGER, image VARCHAR);";
 
     private AlarmDatabase.SQLHelper helper;
     private SQLiteDatabase db;
@@ -35,88 +35,91 @@ public class AlarmDatabase {
         return this;
     }
 
-    Cursor getData1(String sql) {
+    public Cursor getData(String sql) {
         db = helper.getReadableDatabase();
         return db.rawQuery(sql, null);
     }
 
 
-    public ArrayList<Alarm> getData(){
-        db = helper.getReadableDatabase();
-        ArrayList<Alarm> list = new ArrayList<Alarm>();
 
-
-        Cursor cursor = db.rawQuery("SELECT * FROM Alarm ORDER BY id", null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
+    ArrayList<Alarm> getAlarm() {
+        ArrayList<Alarm> list = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM Alarm ", null);
+        while (cursor.moveToNext()) {
 
             int id = cursor.getInt(0);
-            int hour= cursor.getInt(1);
-            int min = cursor.getInt(2);;
-            String description = cursor.getString(3);;
+            int hour = cursor.getInt(1);
+            int min = cursor.getInt(2);
+            ;
+            String description = cursor.getString(3);
+            ;
 
             boolean alarmOn = false;
-            if(cursor.getInt(4) == 1){
+            if (cursor.getInt(4) == 1) {
                 alarmOn = true;
             }
 
             boolean recurring = false;
-            if(cursor.getInt(5) == 1){
+            if (cursor.getInt(5) == 1) {
                 recurring = true;
             }
 
             boolean mon = false;
-            if(cursor.getInt(6) == 1){
+            if (cursor.getInt(6) == 1) {
                 mon = true;
             }
             boolean tue = false;
-            if(cursor.getInt(7) == 1){
+            if (cursor.getInt(7) == 1) {
                 tue = true;
             }
             boolean wed = false;
-            if(cursor.getInt(8) == 1){
+            if (cursor.getInt(8) == 1) {
                 wed = true;
             }
             boolean thur = false;
-            if(cursor.getInt(9) == 1){
+            if (cursor.getInt(9) == 1) {
                 thur = true;
             }
             boolean fri = false;
-            if(cursor.getInt(10) == 1){
+            if (cursor.getInt(10) == 1) {
                 fri = true;
             }
             boolean sat = false;
-            if(cursor.getInt(11) == 1){
+            if (cursor.getInt(11) == 1) {
                 sat = true;
             }
             boolean sun = false;
-            if(cursor.getInt(12) == 1){
+            if (cursor.getInt(12) == 1) {
                 sun = true;
             }
 
-            byte[] image = cursor.getBlob(13);
+            String image = cursor.getString(13);
 
-            list.add(new Alarm(id,hour,min,description,alarmOn,recurring,mon,tue,wed,thur,fri,sat,sun,image));
-
-
+            list.add(new Alarm(id, hour, min, description, alarmOn, recurring, mon, tue, wed, thur, fri, sat, sun, image));
         }
+        cursor.close();
         return list;
     }
+
+
+
+
+
+
 
     public int getOneAlarm(String des){
         db = helper.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT id FROM Alarm WHERE description = '"+des+"'", null);
+        Cursor cursor = db.rawQuery("SELECT id FROM Alarm WHERE description = \""+des+"\"", null);
         cursor.moveToFirst();
 
         int id = cursor.getInt(0);
 
-        db.close();
-        close();
+        cursor.close();
         return id;
     }
 
-    public boolean addRow(int hour, int min, String description, int alarmOn, int recurring, int mon, int tue, int wed, int thur, int fri, int sat, int sun, byte[] image) {
+    boolean addRow(int hour, int min, String description, int alarmOn, int recurring, int mon, int tue, int wed, int thur, int fri, int sat, int sun, String image) {
         synchronized(this.db) {
 
             ContentValues newAlarm = new ContentValues();
@@ -147,8 +150,18 @@ public class AlarmDatabase {
         }
     }
 
+    void updateAlarm(int alarmOn, String des){
+        db = helper.getReadableDatabase();
 
-    boolean updateData(int id, int hour, int min, String description, int alarmOn, int recurring, int mon, int tue, int wed, int thur, int fri, int sat, int sun, byte[] image) {
+        Cursor cursor = db.rawQuery("UPDATE Alarm SET  alarmOn = \""+alarmOn +"\" WHERE description = \""+des+"\"", null);
+        cursor.moveToNext();
+        cursor.close();
+
+        db.close();
+    }
+
+
+    boolean updateData(int id, int hour, int min, String description, int alarmOn, int recurring, int mon, int tue, int wed, int thur, int fri, int sat, int sun, String image) {
         db = helper.getReadableDatabase();
 
         ContentValues newAlarm = new ContentValues();
@@ -203,9 +216,6 @@ public class AlarmDatabase {
         public SQLHelper (Context c) {
             super(c, DB_NAME, null, DB_VERSION);
         }
-
-
-
 
         @Override
         public void onCreate(SQLiteDatabase db) {

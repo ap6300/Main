@@ -192,20 +192,7 @@
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"/>
 
-    <TextView
-        android:id="@+id/id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
 
-    <Button
-        android:id="@+id/updateAlarm_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:backgroundTint="#4567C5"
-        android:text="Update"
-        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/deleteAlarm_button"

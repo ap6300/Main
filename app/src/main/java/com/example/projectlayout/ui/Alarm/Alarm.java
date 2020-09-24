@@ -40,9 +40,9 @@ public class Alarm {
     private boolean fri;
     private boolean sat;
     private boolean sun;
-    private byte [] image;
+    private String image;
 
-    public Alarm(int id,int hour,int min, String description,boolean alarmOn, boolean recurring, boolean mon, boolean tue, boolean wed, boolean thur, boolean fri, boolean sat, boolean sun, byte [] image)
+    public Alarm(int id,int hour,int min, String description,boolean alarmOn, boolean recurring, boolean mon, boolean tue, boolean wed, boolean thur, boolean fri, boolean sat, boolean sun, String image)
     {
         this.id=id;
         this.hour = hour;
@@ -157,11 +157,11 @@ public class Alarm {
         this.sun = sun;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
@@ -181,7 +181,7 @@ public class Alarm {
 
         intent.putExtra(DESCRIPTION,description);
         intent.putExtra(ID,id);
-        //intent.putExtra(IMAGE,image);
+
 
 
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
@@ -224,11 +224,17 @@ public class Alarm {
                     alarmPendingIntent
             );
         }
-
-
-
-
         this.alarmOn = true;
+    }
+    public void cancelAlarm(Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, Receiver.class);
+        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
+        alarmManager.cancel(alarmPendingIntent);
+        this.alarmOn = false;
+
+        String toastText = String.format("Alarm cancelled for %02d:%02d with id %d", hour, min, id);
+        Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
     }
 
 
