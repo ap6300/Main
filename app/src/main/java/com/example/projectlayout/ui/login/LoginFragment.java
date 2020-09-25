@@ -41,7 +41,9 @@ public class LoginFragment extends Fragment {
     private Button login;
     private TextView register;
     private RequestQueue requestQueue;
-    private static String URL = "http://10.0.2.2:8080/myWant/login.php";
+    //private static String URL = "http://10.0.2.2:8080/myWant/login.php";
+    //For alex
+    private static String URL = "http://192.168.1.120/mywant/login.php";
     private StringRequest request;
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -90,7 +92,10 @@ public class LoginFragment extends Fragment {
         register.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                openlink("http://10.0.2.2:8080/myWant/Registration.html");
+                //For sean
+                //openlink("http://10.0.2.2:8080/myWant/Registration.html");
+                //For Alex
+                openlink("http://192.168.1.120/mywant/Registration.html");
             }
         });
 

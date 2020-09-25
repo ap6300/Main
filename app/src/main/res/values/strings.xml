@@ -27,8 +27,8 @@
     <string name="tab_item_want">Want</string>
 
     <string name="activity_login"><a href="http://10.0.2.2:8080/myWant/Registration.html">Click here to register an account</a></string>
-    <string name="email">email</string>
-    <string name="password">password</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
     <string name="menu_login">Login</string>
     <string name="button_stop">Stop</string>
     <string name="description_bookCover">navigation to book from home</string>

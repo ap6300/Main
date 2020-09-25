@@ -74,7 +74,8 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.projectlayout.ui.login.LoginFragment"
-        tools:layout="@layout/fragment_login" >
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_nav_home"
             app:destination="@id/nav_home" />

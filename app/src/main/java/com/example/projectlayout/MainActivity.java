@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity  {
 
             final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
             NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+
         if(name.equals("Login")){
             NavigationUI.setupWithNavController(navigationView, navController);
         }else{
@@ -74,6 +75,8 @@ public class MainActivity extends AppCompatActivity  {
                 }
             });
         }
+
+
 
     }
 
