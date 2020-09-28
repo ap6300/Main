@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.navigation.ui.AppBarConfiguration;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -45,7 +44,7 @@ public class LoginFragment extends Fragment {
     //For alex
     private static String URL = "http://192.168.1.120:80/mywant/login.php";
     private StringRequest request;
-    private AppBarConfiguration mAppBarConfiguration;
+
 
 
     public LoginFragment() {
