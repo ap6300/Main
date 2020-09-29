@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.projectlayout"
-    >
+    package="com.example.projectlayout">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -24,12 +23,12 @@
         tools:ignore="InnerclassSeparator"
         android:usesCleartextTraffic="true">
         <activity android:name=".ui.Alarm.testActivity" />
-        <activity android:name=".LoginActivity"/>
 
         <service
             android:name=".AlarmService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+             />
 
         <activity
             android:name=".MainActivity"

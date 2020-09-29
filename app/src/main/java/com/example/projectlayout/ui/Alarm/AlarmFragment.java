@@ -30,7 +30,7 @@ public class AlarmFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_alarm, container, false);
         setHasOptionsMenu(true);
 
-        GridView recyclerView = (GridView) root.findViewById(R.id.alarm_list);
+        GridView recyclerView = root.findViewById(R.id.alarm_list);
 
         ArrayList<Alarm> list = new ArrayList<>();
         list.clear();

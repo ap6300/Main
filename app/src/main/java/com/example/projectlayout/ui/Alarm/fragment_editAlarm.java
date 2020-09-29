@@ -1,6 +1,8 @@
 package com.example.projectlayout.ui.Alarm;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -17,8 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -87,36 +91,25 @@ public class fragment_editAlarm extends Fragment {
     private TimePicker picker;
     private EditText des;
     private CheckBox repeat;
-    private CheckBox monday;
-    private CheckBox tuesday;
-    private CheckBox wednesday;
-    private CheckBox thursday;
-    private CheckBox friday;
-    private CheckBox saturday;
-    private CheckBox sunday;
     private int[] id = {0};
     private boolean[] alarmOn = {false};
     private ImageView imageView;
-
+    private int[] weekday = new int[7];
+    private boolean[] fetch = new boolean[7];
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-         View root = inflater.inflate(R.layout.fragment_edit_alarm, container, false);
+         final View root = inflater.inflate(R.layout.fragment_edit_alarm, container, false);
+         setHasOptionsMenu(true);
 
 
-        picker=(TimePicker)root.findViewById(R.id.timePicker1_edit);
-        des = (EditText) root.findViewById(R.id.description_edit_alarm);
-        repeat = (CheckBox) root.findViewById(R.id.repeat_edit);
+        picker=root.findViewById(R.id.timePicker1_edit);
+        des = root.findViewById(R.id.description_edit_alarm);
 
-        monday = (CheckBox) root.findViewById(R.id.Mon_edit);
-        tuesday = (CheckBox) root.findViewById(R.id.Tue_edit);
-        wednesday = (CheckBox) root.findViewById(R.id.Wed_edit);
-        thursday = (CheckBox) root.findViewById(R.id.Thur_edit);
-        friday = (CheckBox) root.findViewById(R.id.Fri_edit);
-        saturday = (CheckBox) root.findViewById(R.id.Sat_edit);
-        sunday = (CheckBox) root.findViewById(R.id.Sun_edit);
+
+
 
 
        imageView = root.findViewById(R.id.imageView_edit_alarm);
@@ -125,7 +118,12 @@ public class fragment_editAlarm extends Fragment {
         db = new AlarmDatabase(getActivity());
         db.openReadable();
 
-
+        final String[] week = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+        final String[] shortWeek = {"Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"};
+        final TextView show_recurring = root.findViewById(R.id.show_recurring1);
+        final ArrayList<String> list = new ArrayList<>();
+        final int[] i = {0};
+        final int[] x = {0};
 
         getParentFragmentManager().setFragmentResultListener("key", this, new FragmentResultListener() {
             @Override
@@ -134,26 +132,16 @@ public class fragment_editAlarm extends Fragment {
                 Cursor cursor = db.getData("SELECT * FROM Alarm where description = \""+result+"\";");
 
                 String image = null;
-
                 int hour = 0;
                 int min = 0;
                 String description = null;
 
                 boolean recurring = false;
-                boolean mon = false;
-                boolean tue = false;
-                boolean wed = false;
-                boolean thur = false;
-                boolean fri = false;
-                boolean sat = false;
-                boolean sun = false;
                 while (cursor.moveToNext()) {
-
                     id[0] = cursor.getInt(0);
                     hour= cursor.getInt(1);
                     min = cursor.getInt(2);;
                     description = cursor.getString(3);;
-
 
                     if(cursor.getInt(4) == 1){
                         alarmOn[0] = true;
@@ -161,51 +149,46 @@ public class fragment_editAlarm extends Fragment {
 
                     if(cursor.getInt(5) == 1){
                         recurring = true;
+                        x[0]=1;
                     }
-
-                    if(cursor.getInt(6) == 1){
-                        mon = true;
-                    }
-
-                    if(cursor.getInt(7) == 1){
-                        tue = true;
-                    }
-
-                    if(cursor.getInt(8) == 1){
-                        wed = true;
-                    }
-
-                    if(cursor.getInt(9) == 1){
-                        thur = true;
-                    }
-
-                    if(cursor.getInt(10) == 1){
-                        fri = true;
-                    }
-
-                    if(cursor.getInt(11) == 1){
-                        sat = true;
-                    }
-
-                    if(cursor.getInt(12) == 1){
-                        sun = true;
-                    }
-
+                    fetch[0]= cursor.getInt(6) == 1;
+                    fetch[1]= cursor.getInt(7) == 1;
+                    fetch[2]=cursor.getInt(8)== 1;
+                    fetch[3]=cursor.getInt(9)== 1;
+                    fetch[4]=cursor.getInt(10)== 1;
+                    fetch[5]=cursor.getInt(11)== 1;
+                    fetch[6]=cursor.getInt(12)== 1;
                     image = cursor.getString(13);
                 }
+                cursor.close();
 
                 picker.setHour(hour);
                 picker.setMinute(min);
                 des.setText(description);
                 repeat.setChecked(recurring);
-                monday.setChecked(mon);
-                tuesday.setChecked(tue);
-                wednesday.setChecked(wed);
-                thursday.setChecked(thur);
-                friday.setChecked(fri);
-                saturday.setChecked(sat);
-                sunday.setChecked(sun);
+                if (x[0]==1){
+                    i[0] =1;
+                    list.clear();
+                    for(int i = 0 ; i < week.length; i ++){
+                        if(fetch[i]){
+                            list.add(shortWeek[i]);
+                        }
+                    }
 
+                    StringBuilder out = new StringBuilder();
+                    for(int i = 0; i < list.size(); i++)
+                    {
+                        if(i!=list.size()-1) {
+                            out.append(list.get(i)).append(",");
+                        }else{
+                            out.append(list.get(i));
+                        }
+                    }
+                    show_recurring.setText(out);
+                }else{
+                    i[0]=1;
+                    show_recurring.setText("");
+                }
                 byte[] imageByte = Base64.decode(image,Base64.DEFAULT);
                 Bitmap bitmap = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);
                 imageView.setImageBitmap(bitmap);
@@ -227,9 +210,77 @@ public class fragment_editAlarm extends Fragment {
             }
         });
 
+        repeat =  root.findViewById(R.id.repeat_edit);
+        repeat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    if(isChecked & i[0] ==1) {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("Repeat");
 
 
-        Button delete = (Button) root.findViewById(R.id.deleteAlarm_button);
+                        builder.setMultiChoiceItems(week, fetch, new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                if (isChecked) {
+                                    weekday[which] = 1;
+                                    fetch[which] =true;
+                                } else {
+                                    weekday[which] = 0;
+                                }
+
+                            }
+
+
+
+
+                        });
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                repeat.setChecked(false);
+                            }
+                        });
+                        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                list.clear();
+                                for (int i = 0; i < week.length; i++) {
+                                    if (fetch[i]) {
+                                        list.add(shortWeek[i]);
+                                    }
+                                }
+
+                                StringBuilder out = new StringBuilder();
+                                for (int i = 0; i < list.size(); i++) {
+                                    if (i != list.size() - 1) {
+                                        out.append(list.get(i)).append(",");
+                                    } else {
+                                        out.append(list.get(i));
+                                    }
+                                }
+                                show_recurring.setText(out);
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+
+                    }else{
+                        i[0]=1;
+                        show_recurring.setText("");
+                        for(int j =0; j < weekday.length ;j++) {
+                            weekday[j] = 0;
+                        }
+                    }
+
+            }
+        });
+
+
+
+        Button delete = root.findViewById(R.id.deleteAlarm_button);
 
         delete.setOnClickListener(new View.OnClickListener(){
 
@@ -247,7 +298,6 @@ public class fragment_editAlarm extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_tick, menu);
         super.onCreateOptionsMenu(menu, inflater);
-
     }
 
     @Override
@@ -264,7 +314,6 @@ public class fragment_editAlarm extends Fragment {
                     .navigate(R.id.action_fragment_editAlarm_to_nav_alarm);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -277,43 +326,31 @@ public class fragment_editAlarm extends Fragment {
         if(repeat.isChecked()){
             recurring= 1;
         }
-
-        int mon = 0;
-        if(monday.isChecked()){
-            mon = 1;
+        if(fetch[0]){
+            weekday[0]=1;
+        }
+        if(fetch[1]){
+            weekday[1]=1;
+        }
+        if(fetch[2]){
+            weekday[2]=1;
+        }
+        if(fetch[3]){
+            weekday[3]=1;
+        }
+        if(fetch[4]){
+            weekday[4]=1;
+        }
+        if(fetch[5]){
+            weekday[5]=1;
+        }
+        if(fetch[6]){
+            weekday[6]=1;
         }
 
-        int tue = 0;
-        if(tuesday.isChecked()){
-            tue = 1;
-        }
 
-        int wed = 0;
-        if(wednesday.isChecked()){
-            wed = 1;
-        }
 
-        int thur = 0;
-        if(thursday.isChecked()){
-            thur = 1;
-        }
-
-        int fri = 0;
-        if(friday.isChecked()){
-            fri = 1;
-        }
-
-        int sat = 0;
-        if(saturday.isChecked()){
-            sat = 1;
-        }
-
-        int sun = 0;
-        if(sunday.isChecked()){
-            sun = 1;
-        }
-
-        db.updateData(id[0],picker.getHour(),picker.getMinute(),des.getText().toString(),on,recurring,mon,tue,wed,thur,fri,sat,sun, Base64.encodeToString(imageViewToByte(imageView),Base64.DEFAULT));
+        db.updateData(id[0],picker.getHour(),picker.getMinute(),des.getText().toString(),on,recurring,weekday[0],weekday[1],weekday[2],weekday[3],weekday[4],weekday[5],weekday[6], Base64.encodeToString(imageViewToByte(imageView),Base64.DEFAULT));
         Toast.makeText(getActivity(), "Success update row", Toast.LENGTH_SHORT).show();
 
 
