@@ -1,6 +1,5 @@
 package com.example.projectlayout.ui.home;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +13,7 @@ import com.example.projectlayout.R;
 
 public class bookRecyclerAdapter extends RecyclerView.Adapter<bookRecyclerAdapter.ViewHolder> {
     private final int[] mValues;
-    private Context mContext;
-
+    //constructor
     bookRecyclerAdapter(int[] items) {
         this.mValues = items;
     }
@@ -30,9 +28,10 @@ public class bookRecyclerAdapter extends RecyclerView.Adapter<bookRecyclerAdapte
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        //set the image
         holder.mImageView.setImageResource(mValues[position]);
 
-        //Set the background to be back for the book cover else be white background
+        //Set the background to be black for the book cover else be white background
         if(mValues[position] == (R.drawable.book1)) {
             holder.mImageView.setBackgroundColor(Color.BLACK);
         }else{
@@ -48,7 +47,6 @@ public class bookRecyclerAdapter extends RecyclerView.Adapter<bookRecyclerAdapte
     static class ViewHolder extends RecyclerView.ViewHolder {
         final View mView;
         final ImageView mImageView;
-
 
         ViewHolder(View view) {
             super(view);

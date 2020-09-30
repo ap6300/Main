@@ -105,9 +105,6 @@ public class WantsFragment extends Fragment {
 
             }
         });
-
-
-
         return root;
     }
 
@@ -124,9 +121,8 @@ public class WantsFragment extends Fragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.add_toolbar) {
-            showAdd(getView());
+            showAdd();
             return true;
         }
 
@@ -182,7 +178,7 @@ public class WantsFragment extends Fragment {
         DontWantRecyclerViewAdapter adt = new DontWantRecyclerViewAdapter(list, getContext(), new DontWantRecyclerViewAdapter.RecycleViewInterface() {
             @Override
             public void onItemClick(int position) {
-                showEdit(getView(), position);
+                showEdit(position);
             }
         });
         productRec.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -191,8 +187,8 @@ public class WantsFragment extends Fragment {
     }
 
 
-
-    private void showAdd(View view) {
+    //Build alert dialog for adding task with an add button
+    private void showAdd() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         if(tab.getSelectedTabPosition()==1) {
             builder.setTitle("Add Want");
@@ -206,6 +202,7 @@ public class WantsFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 EditText editText = customLayout.findViewById(R.id.editTextTextPersonName);
 
+                //determine the list
                 if(tab.getSelectedTabPosition()==1) {
                     wantdb.openReadable();
                     int x = item1.size();
@@ -234,13 +231,14 @@ public class WantsFragment extends Fragment {
                         Toast.makeText(getActivity(), "Failure", Toast.LENGTH_SHORT).show();
                     }
                 }
+
             }
         });
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    private void showEdit(View view, int position) {
+    private void showEdit(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         final View customLayout = getLayoutInflater().inflate(R.layout.custom_add_item_first, null);
         final EditText editText = customLayout.findViewById(R.id.editTextTextPersonName);
@@ -251,11 +249,10 @@ public class WantsFragment extends Fragment {
             //fetch data from database
             Cursor cursor = wantdb.getData("SELECT * FROM Want where listOrder = \""+position+"\";");
             cursor.moveToNext();
+            task = cursor.getString(0);
             cursor.close();
 
             //set text into edittext
-            task = cursor.getString(0);
-
             editText.setText(task);
         }else{
             builder.setTitle("Edit Don't Want");
@@ -302,18 +299,34 @@ public class WantsFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         if(tab.getSelectedTabPosition()==1) {
                             wantdb.clearRecords(finalTask);
+
+                            for(int i=position;i<wantdb.count();i++) {
+                                String y =wantdb.getListOrder(i+1);
+                                wantdb.updateListOrder(y, i);
+                            }
+
                             item1 = wantdb.getWantItem();
                             //set up the adapter
                             setup(item1);
 
+
                             wantdb.close();
                         } else {
+
                             dontWantdb.clearRecords(finalTask);
-                            item = dontWantdb.getDontWantItem();
+                            for(int i=position;i<dontWantdb.count();i++) {
+                                String y =dontWantdb.getListOrder(i+1);
+                                dontWantdb.updateListOrder(y, i);
+                            }
+
+
+
+                           item = dontWantdb.getDontWantItem();
                             //set up the adapter
                             setup(item);
 
                             dontWantdb.close();
+
                         }
                     }
         });
@@ -321,6 +334,7 @@ public class WantsFragment extends Fragment {
         dialog.show();
 
     }
+
 
 
 

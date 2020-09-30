@@ -21,10 +21,7 @@ public class MainActivity extends AppCompatActivity  {
 
     private AppBarConfiguration mAppBarConfiguration;
     private AppBarConfiguration beforeLoginAppBarConfiguration;
-
-
-
-
+    DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,20 +30,12 @@ public class MainActivity extends AppCompatActivity  {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String name = preferences.getString("Check","");
 
-
-
-
-
-
-
-        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
-
-
-
+        //init
+        drawer = findViewById(R.id.drawer_layout);
         final NavigationView navigationView = findViewById(R.id.nav_view);
+        final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -54,14 +43,19 @@ public class MainActivity extends AppCompatActivity  {
                 R.id.nav_home, R.id.nav_alarm,R.id.nav_dream,R.id.nav_wants,R.id.bookFragment)
                 .setOpenableLayout(drawer)
                 .build();
+
+        //set up another configuration for before login
         beforeLoginAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home,R.id.bookFragment,R.id.loginFragment)
                 .setOpenableLayout(drawer)
                 .build();
 
-            final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-            //NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
 
+        //init
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String name = preferences.getString("Check","");
+
+        //check the user login and show different navigation drawer for not login and logged in
         if(name.equals("Login")){
             NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
             NavigationUI.setupWithNavController(navigationView, navController);
@@ -75,20 +69,14 @@ public class MainActivity extends AppCompatActivity  {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     int id = item.getItemId();
-
+                    //a promo toast msg for locked function and set up navigation for home,book and login
                     switch(id)
                     {
-                        case R.id.alarm :
-                            drawer.close();
-                            Toast.makeText(getBaseContext() , "Login to unlock the function ", Toast.LENGTH_SHORT).show();
-                            break;
+                        case R.id.alarm:
                         case R.id.wants:
-                            drawer.close();
-                            Toast.makeText(getBaseContext() , "Login to unlock the function ", Toast.LENGTH_SHORT).show();
-                            break;
                         case R.id.dream:
                             drawer.close();
-                            Toast.makeText(getBaseContext() , "Login to unlock the function ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getBaseContext() , "Please login to gain full access ", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.nav_home:
                             drawer.close();
@@ -109,9 +97,6 @@ public class MainActivity extends AppCompatActivity  {
 
             });
         }
-
-
-
     }
 
     @Override
@@ -128,7 +113,5 @@ public class MainActivity extends AppCompatActivity  {
         }
 
     }
-
-
 }
 

@@ -13,11 +13,9 @@ import com.wajahatkarim3.easyflipviewpager.BookFlipPageTransformer2;
 
 public class BookFragment extends Fragment {
 
-
     public BookFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,8 +30,7 @@ public class BookFragment extends Fragment {
        int[] bookImage = new int[]{R.drawable.book1,R.drawable.book2,R.drawable.book3,R.drawable.book4,R.drawable.book5,R.drawable.book6,R.drawable.book7,R.drawable.book8,R.drawable.book9,R.drawable.book10,
                                 R.drawable.book11,R.drawable.book12};
 
-
-       //Initiate Viewpaper and  adapter
+        //Initiate Viewpaper and  adapter
         ViewPager2 book = root.findViewById(R.id.bookView);
         bookRecyclerAdapter bookRecyclerAdapter = new bookRecyclerAdapter(bookImage);
 
@@ -45,8 +42,6 @@ public class BookFragment extends Fragment {
         bookFlipPageTransformer.setEnableScale(true);
         bookFlipPageTransformer.setScaleAmountPercent(10f);
         book.setPageTransformer(bookFlipPageTransformer);
-
-
        return root;
     }
 }

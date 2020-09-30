@@ -3,7 +3,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">My Wants</string>
-    <string name="nav_header_subtitle">An APP that makes a Difference</string>
+    <string name="nav_header_subtitle">An APP that makes a difference to your life</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
@@ -27,6 +27,7 @@
     <string name="tab_item_want">Want</string>
 
     <string name="activity_login"><a href="http://10.0.2.2:8080/myWant/Registration.html">Click here to register an account</a></string>
+
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="menu_login">Login</string>

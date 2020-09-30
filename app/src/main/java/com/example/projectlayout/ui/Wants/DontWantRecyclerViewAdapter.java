@@ -17,7 +17,6 @@ public class DontWantRecyclerViewAdapter extends RecyclerView.Adapter<DontWantRe
 
     private ArrayList<want> item;
     private LayoutInflater mInflater;
-    private Context context;
     private RecycleViewInterface recycleViewInterface;
 
     public interface RecycleViewInterface {
@@ -29,7 +28,6 @@ public class DontWantRecyclerViewAdapter extends RecyclerView.Adapter<DontWantRe
 
     public DontWantRecyclerViewAdapter(ArrayList<want> data, Context context, RecycleViewInterface recycleViewInterface) {
         this.item = data;
-        this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.recycleViewInterface = recycleViewInterface;
 

@@ -233,7 +233,7 @@ public class Alarm {
         alarmManager.cancel(alarmPendingIntent);
         this.alarmOn = false;
 
-        String toastText = String.format("Alarm cancelled for %02d:%02d with id %d", hour, min, id);
+        String toastText = String.format("Alarm cancelled for %02d:%02d", hour, min);
         Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
     }
 

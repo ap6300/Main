@@ -10,7 +10,7 @@ public class HomeViewModel extends ViewModel {
 
     public HomeViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("AN APP THAT MAKES A DIFFERENCE");
+        mText.setValue("AN APP THAT MAKES A DIFFERENCE TO YOUR LIFE");
     }
 
     public LiveData<String> getText() {

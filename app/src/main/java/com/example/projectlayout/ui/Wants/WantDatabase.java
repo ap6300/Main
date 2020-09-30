@@ -110,6 +110,16 @@ public class WantDatabase {
         db.close();
 
     }
+    int count(){
+        db= helper.getReadableDatabase();
+
+        String countQuery = "SELECT  * FROM " + DB_TABLE;
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+
+    }
 
 
     public void clear()
