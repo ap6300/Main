@@ -34,10 +34,14 @@ public class HomeFragment extends Fragment{
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-
+        //init
         YouTubePlayerView youTubePlayerView = root.findViewById(R.id.videoView2);
         getLifecycle().addObserver(youTubePlayerView);
+        ImageButton login = root.findViewById(R.id.btn_website);
+        textView = root.findViewById(R.id.text_home);
+        ImageButton book = root.findViewById(R.id.btn_book);
 
+        //set property of the youtube, the video won't automatically play
         youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
@@ -47,7 +51,7 @@ public class HomeFragment extends Fragment{
             }
         });
 
-        textView = root.findViewById(R.id.text_home);
+        //set value to textview
         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -55,8 +59,7 @@ public class HomeFragment extends Fragment{
             }
         });
 
-
-        ImageButton book = root.findViewById(R.id.btn_book);
+        //set navigation for pressing the book and navigation to the book fragment
         book.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,8 +68,7 @@ public class HomeFragment extends Fragment{
             }
         });
 
-        ImageButton login = root.findViewById(R.id.btn_website);
-
+        //set navigation for pressing the coin icon and navigation to the website
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,9 +78,6 @@ public class HomeFragment extends Fragment{
 
             }
         });
-
-
-
         return root;
     }
 

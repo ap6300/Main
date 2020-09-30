@@ -51,7 +51,7 @@ public class AlarmAdapter extends BaseAdapter {
             listItem = LayoutInflater.from(mContext).inflate(R.layout.custom_recyclerview_alarm, parent, false);
 
             final Alarm alarm = list.get(position);
-
+            //init
             TextView alarmTime = listItem.findViewById(R.id.item_alarm_time);
             Switch alarmStarted = listItem.findViewById(R.id.item_alarm_started);
             ImageView alarmRecurring = listItem.findViewById(R.id.item_alarm_recurring);
@@ -59,15 +59,13 @@ public class AlarmAdapter extends BaseAdapter {
             TextView alarmTitle = listItem.findViewById(R.id.item_alarm_title);
             ImageView imageView = listItem.findViewById(R.id.imageView2);
 
+            //set the custom view value
             holder.alarmTime = alarmTime;
             holder.alarmStarted = alarmStarted;
             holder.alarmRecurring = alarmRecurring;
             holder.alarmRecurringDays = alarmRecurringDays;
             holder.alarmTitle = alarmTitle;
             holder.imageView = imageView;
-
-            //set the custom view value
-
 
             @SuppressLint("DefaultLocale") String alarmText = String.format("%02d:%02d", alarm.getHour(), alarm.getMin());
             holder.alarmTime.setText(alarmText);

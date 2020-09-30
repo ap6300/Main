@@ -65,11 +65,12 @@ public class DreamFragment extends Fragment  {
         View root = inflater.inflate(R.layout.fragment_dream, container, false);
 
         setHasOptionsMenu(true);
-        //ListView
+        //init
         gridview = root.findViewById(R.id.gridview);
 
         setUpAdapter();
 
+        //set onclick to have alert dialog
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            @Override
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -97,7 +98,7 @@ public class DreamFragment extends Fragment  {
         }
         return super.onOptionsItemSelected(item);
     }
-
+    //set the adapter to the listview
     private void setUpAdapter(){
         ArrayList<Dreamboard> list = db.getDream();
         ImageAdapter arrayAdpt = new ImageAdapter(getContext(), list);
@@ -105,6 +106,7 @@ public class DreamFragment extends Fragment  {
         db.close();
     }
 
+    //show dialog when the add button pressed
     private void showAlertDialogAddClicked(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Add Dreamboard");
@@ -143,7 +145,7 @@ public class DreamFragment extends Fragment  {
         dialog.show();
 
     }
-
+    //show dialog when the edit button pressed
     private void showEdit(View view,String selected) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Edit Dreamboard");
@@ -190,8 +192,6 @@ public class DreamFragment extends Fragment  {
             }
         });
 
-
-
         builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -202,7 +202,6 @@ public class DreamFragment extends Fragment  {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
 
 
 

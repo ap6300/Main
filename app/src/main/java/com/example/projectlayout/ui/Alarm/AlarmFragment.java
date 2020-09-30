@@ -30,12 +30,10 @@ public class AlarmFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_alarm, container, false);
         setHasOptionsMenu(true);
 
+        //init
         GridView recyclerView = root.findViewById(R.id.alarm_list);
-
         ArrayList<Alarm> list = new ArrayList<>();
         list.clear();
-
-
         final AlarmDatabase db = new AlarmDatabase(getContext());
         db.openReadable();
 
@@ -58,11 +56,12 @@ public class AlarmFragment extends Fragment {
 
             }
         });
+        //set up the listview
         recyclerView.setAdapter(alarmAdapter);
-
         alarmAdapter.notifyDataSetChanged();
         db.close();
 
+        //on item click pass the alarm detail to the destination fragment
         recyclerView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

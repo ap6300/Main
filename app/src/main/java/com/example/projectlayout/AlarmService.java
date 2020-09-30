@@ -50,18 +50,20 @@ public class AlarmService extends Service {
 
         int notificationId = intent.getIntExtra(ID,0);
 
+        //init database
         AlarmDatabase db = new AlarmDatabase(getApplicationContext());
         db.openReadable();
-
+        //fetch data from database
         Cursor cursor = db.getData("SELECT * FROM Alarm where description = \""+alarmTitle+"\";");
-
         cursor.moveToNext();
+        //covert image string to bitmap
         String image = cursor.getString(13);
-
         byte[] recordImage = Base64.decode(image,Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(recordImage, 0, recordImage.length);
 
         createNotificationChannel();
+
+        //build the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_alarm_black_24dp)
                 .setContentTitle(alarmTitle)

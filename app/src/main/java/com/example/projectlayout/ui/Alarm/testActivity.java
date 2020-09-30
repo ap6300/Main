@@ -40,6 +40,10 @@ public class testActivity extends Activity {
         byte[] recordImage = Base64.decode(image,Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(recordImage, 0, recordImage.length);
 
+        //set alarm off in the database
+        String des = cursor.getString(3);
+        db.updateAlarm(0,des);
+
         //init the textview and set the description to the textview
         TextView one = findViewById(R.id.textView3);
         one.setText(alarmTitle);
